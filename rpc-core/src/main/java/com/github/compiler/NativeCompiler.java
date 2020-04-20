@@ -1,6 +1,11 @@
 package com.github.compiler;
 
-import javax.tools.*;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;

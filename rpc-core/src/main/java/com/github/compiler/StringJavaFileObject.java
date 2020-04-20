@@ -4,6 +4,7 @@ import javax.tools.SimpleJavaFileObject;
 import java.io.IOException;
 import java.net.URI;
 
+
 public class StringJavaFileObject extends SimpleJavaFileObject {
     private static final String SCHEME = "string:///";
     private final String code;

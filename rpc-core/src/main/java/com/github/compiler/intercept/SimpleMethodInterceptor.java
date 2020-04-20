@@ -2,8 +2,8 @@ package com.github.compiler.intercept;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class SimpleMethodInterceptor implements Interceptor {
 
+public class SimpleMethodInterceptor implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         System.out.println(StringUtils.center("[SimpleMethodInterceptor##intercept]", 48, "*"));
@@ -12,8 +12,8 @@ public class SimpleMethodInterceptor implements Interceptor {
         // 这里可以对一些敏感的关键字进行拦截处理
         // 这里可以加入你自己的业务逻辑代码。
         // TODO: your intercept logic here
+
         return invocation.proceed();
     }
-
 }
 

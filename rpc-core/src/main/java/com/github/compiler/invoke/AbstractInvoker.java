@@ -1,14 +1,14 @@
 package com.github.compiler.invoke;
 
-
 import com.github.core.ReflectionUtils;
 
 import java.lang.reflect.Method;
 
+
 public abstract class AbstractInvoker implements ObjectInvoker {
     @Override
     public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
-        // FIXME: 2017/8/31 Object类的方法没有必要字节码增强，这里直接判断返回
+        // FIXME: 2017/8/31  Object类的方法没有必要字节码增强，这里直接判断返回
         if (ReflectionUtils.isHashCodeMethod(method)) {
             return Integer.valueOf(System.identityHashCode(proxy));
         }

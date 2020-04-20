@@ -2,7 +2,6 @@ package com.github.exception;
 
 
 public class AsyncCallException extends RuntimeException {
-
     public AsyncCallException() {
         super();
     }
@@ -18,6 +17,5 @@ public class AsyncCallException extends RuntimeException {
     public AsyncCallException(Throwable cause) {
         super(cause);
     }
-
 }
 

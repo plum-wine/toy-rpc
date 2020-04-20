@@ -4,7 +4,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-
 public class ClassCache {
     // FIXME: 2017/8/30
     // 引入弱引用节省内存消耗，JVM每次gc的时候，自动释放内存

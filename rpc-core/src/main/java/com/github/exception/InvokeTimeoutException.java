@@ -1,7 +1,7 @@
 package com.github.exception;
 
-public class InvokeTimeoutException extends RuntimeException {
 
+public class InvokeTimeoutException extends RuntimeException {
     public InvokeTimeoutException() {
         super();
     }
@@ -17,6 +17,5 @@ public class InvokeTimeoutException extends RuntimeException {
     public InvokeTimeoutException(Throwable cause) {
         super(cause);
     }
-
 }
 

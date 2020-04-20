@@ -1,9 +1,9 @@
 package com.github.compiler.weaver;
 
-
 import com.github.compiler.intercept.Interceptor;
 import com.github.compiler.invoke.InterceptorInvoker;
 import com.github.compiler.invoke.ObjectInvoker;
+
 
 public class ProxyProvider extends AbstractProxyProvider {
     private static final ClassCache PROXY_CLASS_CACHE = new ClassCache(new ByteCodeClassTransformer());

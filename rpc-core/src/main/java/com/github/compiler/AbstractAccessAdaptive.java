@@ -1,6 +1,5 @@
+
 package com.github.compiler;
-
-
 
 import com.github.compiler.weaver.ClassProxy;
 import com.github.compiler.weaver.ProxyProvider;
@@ -9,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public abstract class AbstractAccessAdaptive implements Compiler {
     private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([$_a-zA-Z][$_a-zA-Z0-9\\.]*);");

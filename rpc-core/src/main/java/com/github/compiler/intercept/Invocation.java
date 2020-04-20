@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 
 public interface Invocation {
-
     Object[] getArguments();
 
     Method getMethod();
@@ -12,6 +11,5 @@ public interface Invocation {
     Object getProxy();
 
     Object proceed() throws Throwable;
-
 }
 

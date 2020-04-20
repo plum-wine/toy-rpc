@@ -1,10 +1,10 @@
 package com.github.compiler.invoke;
 
-
 import com.github.compiler.intercept.Interceptor;
 import com.github.compiler.intercept.InvocationProvider;
 
 import java.lang.reflect.Method;
+
 
 public class InterceptorInvoker extends AbstractInvoker {
     private final Object target;

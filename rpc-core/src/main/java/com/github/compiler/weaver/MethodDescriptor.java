@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+
 public class MethodDescriptor {
     private static final Map<Class<?>, Character> BUILDER = new ImmutableMap.Builder<Class<?>, Character>()
             .put(Boolean.TYPE, Character.valueOf('Z'))

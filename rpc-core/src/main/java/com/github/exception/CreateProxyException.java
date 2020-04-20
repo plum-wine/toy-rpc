@@ -1,8 +1,6 @@
 package com.github.exception;
 
-
 public class CreateProxyException extends RuntimeException {
-
     public CreateProxyException() {
         super();
     }
@@ -18,6 +16,5 @@ public class CreateProxyException extends RuntimeException {
     public CreateProxyException(Throwable cause) {
         super(cause);
     }
-
 }
 
