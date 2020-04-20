@@ -5,13 +5,6 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import static com.github.core.RpcSystemConfig.*;
 
-/**
- * @author tangjie<https: / / github.com / tang-jie>
- * @filename:ProtostuffSerializePool.java
- * @description:ProtostuffSerializePool功能模块
- * @blogs http://www.cnblogs.com/jietang/
- * @since 2016/10/7
- */
 public class ProtostuffSerializePool {
     private GenericObjectPool<ProtostuffSerialize> protostuffPool;
     private static volatile ProtostuffSerializePool poolFactory = null;
