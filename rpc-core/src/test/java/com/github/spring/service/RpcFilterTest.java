@@ -1,4 +1,4 @@
-package com.github;
+package com.github.spring.service;
 
 import com.github.exception.RejectResponeException;
 import com.github.services.Cache;

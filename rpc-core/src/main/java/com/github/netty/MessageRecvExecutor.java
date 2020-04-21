@@ -1,66 +1,61 @@
 
 package com.github.netty;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
-
+import com.github.compiler.AccessAdaptiveProvider;
+import com.github.core.AbilityDetailProvider;
+import com.github.core.RpcSystemConfig;
 import com.github.jmx.ModuleMetricsHandler;
+import com.github.model.MessageKeyVal;
+import com.github.model.MessageRequest;
+import com.github.model.MessageResponse;
+import com.github.netty.resolver.ApiEchoResolver;
+import com.github.parallel.NamedThreadFactory;
+import com.github.parallel.RpcThreadPool;
+import com.github.serialize.RpcSerializeProtocol;
+import com.google.common.util.concurrent.*;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.Data;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 
-import com.github.core.RpcSystemConfig;
-import com.github.parallel.NamedThreadFactory;
-import com.github.parallel.RpcThreadPool;
-import com.github.model.MessageKeyVal;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
-import com.github.serialize.RpcSerializeProtocol;
-import com.github.compiler.AccessAdaptiveProvider;
-import com.github.core.AbilityDetailProvider;
-import com.github.netty.resolver.ApiEchoResolver;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
-
+@Data
 public class MessageRecvExecutor implements ApplicationContextAware {
 
     private String serverAddress;
+
     private int echoApiPort;
+
     private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDKSERIALIZE;
+
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
+
     private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
+
     private static int threadNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
+
     private static int queueNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
+
     private static volatile ListeningExecutorService threadPoolExecutor;
+
     private Map<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
+
     private int numberOfEchoThreadsPool = 1;
 
-    ThreadFactory threadRpcFactory = new NamedThreadFactory("NettyRPC ThreadFactory");
+    ThreadFactory threadRpcFactory = new NamedThreadFactory("RPC-ThreadFactory");
+
     EventLoopGroup boss = new NioEventLoopGroup();
+
     EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
 
     private MessageRecvExecutor() {
@@ -144,9 +139,10 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
                         if (channelFuture.isSuccess()) {
                             final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
-                            ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(executor);
+                            ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
                             completionService.submit(new ApiEchoResolver(host, echoApiPort));
-                            System.out.printf("[author ] Netty RPC Server start success!\nip:%s\nport:%d\nprotocol:%s\nstart-time:%s\njmx-invoke-metrics:%s\n\n", host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(), (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
+                            System.out.printf("RPC Server start success! ip:%s port:%d protocol:%s start-time:%s jmx-invoke-metrics:%s\n\n",
+                                    host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(), (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
                             channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
                                 @Override
                                 public void operationComplete(ChannelFuture future) throws Exception {
@@ -157,7 +153,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                     }
                 });
             } else {
-                System.out.printf("[author ] Netty RPC Server start fail!\n");
+                System.out.println("RPC Server start fail!");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -174,35 +170,4 @@ public class MessageRecvExecutor implements ApplicationContextAware {
         handlerMap.put(RpcSystemConfig.RPC_ABILITY_DETAIL_SPI_ATTR, new AbilityDetailProvider());
     }
 
-    public Map<String, Object> getHandlerMap() {
-        return handlerMap;
-    }
-
-    public void setHandlerMap(Map<String, Object> handlerMap) {
-        this.handlerMap = handlerMap;
-    }
-
-    public String getServerAddress() {
-        return serverAddress;
-    }
-
-    public void setServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
-    }
-
-    public RpcSerializeProtocol getSerializeProtocol() {
-        return serializeProtocol;
-    }
-
-    public void setSerializeProtocol(RpcSerializeProtocol serializeProtocol) {
-        this.serializeProtocol = serializeProtocol;
-    }
-
-    public int getEchoApiPort() {
-        return echoApiPort;
-    }
-
-    public void setEchoApiPort(int echoApiPort) {
-        this.echoApiPort = echoApiPort;
-    }
 }

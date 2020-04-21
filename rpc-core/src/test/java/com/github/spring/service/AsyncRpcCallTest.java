@@ -1,5 +1,5 @@
 
-package com.github;
+package com.github.spring.service;
 
 import com.github.async.AsyncCallObject;
 import com.github.async.AsyncCallback;

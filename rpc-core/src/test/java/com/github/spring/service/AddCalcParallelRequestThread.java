@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github;
+package com.github.spring.service;
 
 import com.github.exception.InvokeTimeoutException;
 import com.github.services.AddCalculate;

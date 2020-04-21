@@ -1,4 +1,4 @@
-package com.github;
+package com.github.spring.service;
 
 import com.github.core.AbilityDetail;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

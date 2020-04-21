@@ -16,6 +16,7 @@ import static org.springframework.beans.factory.BeanFactoryUtils.beansOfTypeIncl
 
 
 public class BeanFactoryUtils implements BeanFactoryAware {
+
     private static BeanFactory beanFactory;
 
     private static boolean isContains(String[] values, String value) {
@@ -62,7 +63,7 @@ public class BeanFactoryUtils implements BeanFactoryAware {
 
     @Override
     public void setBeanFactory(BeanFactory factory) throws BeansException {
-        this.beanFactory = factory;
+        beanFactory = factory;
     }
 }
 

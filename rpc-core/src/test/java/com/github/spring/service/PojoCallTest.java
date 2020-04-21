@@ -1,4 +1,4 @@
-package com.github;
+package com.github.spring.service;
 
 import com.github.services.PersonManage;
 import com.github.services.pojo.Person;

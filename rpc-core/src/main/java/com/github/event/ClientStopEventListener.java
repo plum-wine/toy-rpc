@@ -1,4 +1,3 @@
-
 package com.github.event;
 
 import com.google.common.eventbus.Subscribe;
@@ -16,5 +15,6 @@ public class ClientStopEventListener {
     public int getLastMessage() {
         return lastMessage;
     }
+
 }
 

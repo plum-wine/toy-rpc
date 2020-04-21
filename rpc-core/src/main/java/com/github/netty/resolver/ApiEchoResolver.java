@@ -1,4 +1,3 @@
-
 package com.github.netty.resolver;
 
 import io.netty.bootstrap.ServerBootstrap;

@@ -1,4 +1,4 @@
-package com.github;
+package com.github.spring.service;
 
 import com.google.common.io.CharStreams;
 import com.github.compiler.AccessAdaptive;

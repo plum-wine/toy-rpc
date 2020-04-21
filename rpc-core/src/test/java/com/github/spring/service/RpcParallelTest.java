@@ -1,4 +1,4 @@
-package com.github;
+package com.github.spring.service;
 
 import com.github.services.AddCalculate;
 import com.github.services.MultiCalculate;
