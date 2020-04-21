@@ -140,12 +140,12 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                                     host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(),
                                     (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
 
-                            channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
-                                @Override
-                                public void operationComplete(ChannelFuture future) throws Exception {
-                                    executor.shutdownNow();
-                                }
-                            });
+//                            channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
+//                                @Override
+//                                public void operationComplete(ChannelFuture future) throws Exception {
+//                                    executor.shutdownNow();
+//                                }
+//                            });
                         }
                     }
                 });
