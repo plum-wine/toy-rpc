@@ -13,21 +13,22 @@ import com.github.parallel.NamedThreadFactory;
 import com.github.parallel.RpcThreadPool;
 import com.github.serialize.RpcSerializeProtocol;
 import com.google.common.util.concurrent.*;
+import com.sun.istack.internal.NotNull;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.lang.invoke.MethodHandles;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.*;
-import java.util.logging.Level;
 
 @Data
 public class MessageRecvExecutor implements ApplicationContextAware {
@@ -52,11 +53,13 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private int numberOfEchoThreadsPool = 1;
 
-    ThreadFactory threadRpcFactory = new NamedThreadFactory("RPC-ThreadFactory");
+    private ThreadFactory threadRpcFactory = new NamedThreadFactory("RPC-ThreadFactory");
 
-    EventLoopGroup boss = new NioEventLoopGroup();
+    private EventLoopGroup boss = new NioEventLoopGroup();
 
-    EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
+    private EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private MessageRecvExecutor() {
         handlerMap.clear();
@@ -87,14 +90,14 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                 ctx.writeAndFlush(response).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        System.out.println("RPC Server Send message-id respone:" + request.getMessageId());
+                        LOGGER.info("RPC Server Send message-id respone:{}", request.getMessageId());
                     }
                 });
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
+            public void onFailure(@NotNull Throwable throwable) {
+                LOGGER.error("onFailure", throwable);
             }
         }, threadPoolExecutor);
     }
@@ -104,17 +107,11 @@ public class MessageRecvExecutor implements ApplicationContextAware {
         try {
             MessageKeyVal keyVal = (MessageKeyVal) ctx.getBean(Class.forName("com.github.model.MessageKeyVal"));
             Map<String, Object> rpcServiceObject = keyVal.getMessageKeyVal();
-
-            Set s = rpcServiceObject.entrySet();
-            Iterator<Map.Entry<String, Object>> it = s.iterator();
-            Map.Entry<String, Object> entry;
-
-            while (it.hasNext()) {
-                entry = it.next();
+            for (Map.Entry<String, Object> entry : rpcServiceObject.entrySet()) {
                 handlerMap.put(entry.getKey(), entry.getValue());
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MessageRecvExecutor.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("error", ex);
         }
     }
 
@@ -131,9 +128,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
             if (ipAddr.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
                 final String host = ipAddr[0];
                 final int port = Integer.parseInt(ipAddr[1]);
-                ChannelFuture future = null;
-                future = bootstrap.bind(host, port).sync();
-
+                ChannelFuture future = bootstrap.bind(host, port).sync();
                 future.addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
@@ -141,8 +136,10 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                             final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
                             ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
                             completionService.submit(new ApiEchoResolver(host, echoApiPort));
-                            System.out.printf("RPC Server start success! ip:%s port:%d protocol:%s start-time:%s jmx-invoke-metrics:%s\n\n",
-                                    host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(), (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
+                            LOGGER.info("RPC Server start success! ip:{} port:{} protocol:{} start-time:{} jmx-invoke-metrics:{}",
+                                    host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(),
+                                    (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
+
                             channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
                                 @Override
                                 public void operationComplete(ChannelFuture future) throws Exception {
@@ -153,10 +150,10 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                     }
                 });
             } else {
-                System.out.println("RPC Server start fail!");
+                LOGGER.info("RPC Server start fail!");
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.info("RPC Server start error!", e);
         }
     }
 
