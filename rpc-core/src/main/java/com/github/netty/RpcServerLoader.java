@@ -20,7 +20,7 @@ public class RpcServerLoader {
 
     private static volatile RpcServerLoader rpcServerLoader;
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
-    private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDKSERIALIZE;
+    private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
     private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(PARALLEL);
     private static int threadNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;

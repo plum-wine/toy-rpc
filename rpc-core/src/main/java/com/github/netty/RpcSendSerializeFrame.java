@@ -1,34 +1,37 @@
 package com.github.netty;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.MutableClassToInstanceMap;
-import com.github.netty.handler.*;
+import com.github.netty.handler.JdkNativeSendHandler;
+import com.github.netty.handler.NettyRpcSendHandler;
+import com.github.netty.handler.ProtostuffSendHandler;
 import com.github.serialize.RpcSerializeFrame;
 import com.github.serialize.RpcSerializeProtocol;
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
 import io.netty.channel.ChannelPipeline;
 
 
 public class RpcSendSerializeFrame implements RpcSerializeFrame {
-    private static ClassToInstanceMap<NettyRpcSendHandler> handler = MutableClassToInstanceMap.create();
+
+    private static ClassToInstanceMap<NettyRpcSendHandler> HANDLER = MutableClassToInstanceMap.create();
 
     static {
-        handler.putInstance(JdkNativeSendHandler.class, new JdkNativeSendHandler());
-        handler.putInstance(ProtostuffSendHandler.class, new ProtostuffSendHandler());
+        HANDLER.putInstance(JdkNativeSendHandler.class, new JdkNativeSendHandler());
+        HANDLER.putInstance(ProtostuffSendHandler.class, new ProtostuffSendHandler());
     }
 
     @Override
     public void select(RpcSerializeProtocol protocol, ChannelPipeline pipeline) {
         switch (protocol) {
-            case JDKSERIALIZE: {
-                handler.getInstance(JdkNativeSendHandler.class).handle(pipeline);
+            case JDK_SERIALIZE: {
+                HANDLER.getInstance(JdkNativeSendHandler.class).handle(pipeline);
                 break;
             }
-            case PROTOSTUFFSERIALIZE: {
-                handler.getInstance(ProtostuffSendHandler.class).handle(pipeline);
+            case PROTOSTUFF_SERIALIZE: {
+                HANDLER.getInstance(ProtostuffSendHandler.class).handle(pipeline);
                 break;
             }
             default: {
-                break;
+                throw new RuntimeException();
             }
         }
     }

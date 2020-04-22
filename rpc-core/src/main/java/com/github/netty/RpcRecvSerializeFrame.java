@@ -30,11 +30,11 @@ public class RpcRecvSerializeFrame implements RpcSerializeFrame {
     @Override
     public void select(RpcSerializeProtocol protocol, ChannelPipeline pipeline) {
         switch (protocol) {
-            case JDKSERIALIZE: {
+            case JDK_SERIALIZE: {
                 handler.getInstance(JdkNativeRecvHandler.class).handle(handlerMap, pipeline);
                 break;
             }
-            case PROTOSTUFFSERIALIZE: {
+            case PROTOSTUFF_SERIALIZE: {
                 handler.getInstance(ProtostuffRecvHandler.class).handle(handlerMap, pipeline);
                 break;
             }

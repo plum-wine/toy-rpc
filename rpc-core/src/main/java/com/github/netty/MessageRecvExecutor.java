@@ -4,7 +4,6 @@ package com.github.netty;
 import com.github.compiler.AccessAdaptiveProvider;
 import com.github.core.AbilityDetailProvider;
 import com.github.core.RpcSystemConfig;
-import com.github.jmx.ModuleMetricsHandler;
 import com.github.model.MessageKeyVal;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
@@ -37,7 +36,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private int echoApiPort;
 
-    private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDKSERIALIZE;
+    private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
 
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
 
@@ -136,9 +135,8 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                             final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
                             ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
                             completionService.submit(new ApiEchoResolver(host, echoApiPort));
-                            LOGGER.info("RPC Server start success! ip:{} port:{} protocol:{} start-time:{} jmx-invoke-metrics:{}",
-                                    host, port, serializeProtocol, ModuleMetricsHandler.getStartTime(),
-                                    (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT ? "open" : "close"));
+                            LOGGER.info("RPC Server start success!");
+                            LOGGER.info("ip:{} port:{} protocol:{}", host, port, serializeProtocol);
 
 //                            channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
 //                                @Override
