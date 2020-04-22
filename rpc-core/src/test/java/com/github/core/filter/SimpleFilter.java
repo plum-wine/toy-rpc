@@ -1,4 +1,4 @@
-package com.github.filter.support;
+package com.github.core.filter;
 
 import com.github.filter.Filter;
 import org.apache.commons.lang3.StringUtils;

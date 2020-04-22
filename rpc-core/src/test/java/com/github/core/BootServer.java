@@ -1,5 +1,6 @@
 package com.github.core;
 
+import com.github.core.filter.SimpleFilter;
 import com.github.core.service.HelloService;
 import com.github.core.service.IHelloService;
 import com.github.filter.ServiceFilterBinder;
@@ -24,6 +25,8 @@ public class BootServer {
         HelloService helloService = new IHelloService();
         ServiceFilterBinder binder = new ServiceFilterBinder();
         binder.setObject(helloService);
+        SimpleFilter filter = new SimpleFilter();
+        binder.setFilter(filter);
         MessageRecvExecutor.getInstance().getHandlerMap().put(HelloService.class.getCanonicalName(), binder);
     }
 
