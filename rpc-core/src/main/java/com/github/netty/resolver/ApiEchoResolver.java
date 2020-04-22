@@ -11,14 +11,22 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.MethodHandles;
 import java.util.concurrent.Callable;
 
 
 public class ApiEchoResolver implements Callable<Boolean> {
+
     private static final boolean SSL = System.getProperty("ssl") != null;
+
     private String host;
+
     private int port;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public ApiEchoResolver(String host, int port) {
         this.host = host;
@@ -45,10 +53,7 @@ public class ApiEchoResolver implements Callable<Boolean> {
                     .childHandler(new ApiEchoInitializer(sslCtx));
 
             Channel ch = b.bind(port).sync().channel();
-
-            System.err.println("You can open your web browser see NettyRPC server api interface: " +
-                    (SSL ? "https" : "http") + "://" + host + ":" + port + "/NettyRPC.html");
-
+            LOGGER.info("server api interface: {}://{}:{}/NettyRPC.html", (SSL ? "https" : "http"), host, port);
             ch.closeFuture().sync();
             return Boolean.TRUE;
         } catch (Exception e) {
