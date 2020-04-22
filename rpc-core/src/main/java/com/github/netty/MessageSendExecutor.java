@@ -1,11 +1,10 @@
-
 package com.github.netty;
 
 import com.google.common.reflect.Reflection;
 import com.github.serialize.RpcSerializeProtocol;
 
-
 public class MessageSendExecutor {
+
     private static class MessageSendExecutorHolder {
         private static final MessageSendExecutor INSTANCE = new MessageSendExecutor();
     }
@@ -14,7 +13,7 @@ public class MessageSendExecutor {
         return MessageSendExecutorHolder.INSTANCE;
     }
 
-    private RpcServerLoader loader = RpcServerLoader.getInstance();
+    private final RpcServerLoader loader = RpcServerLoader.getInstance();
 
     private MessageSendExecutor() {
 
@@ -32,8 +31,9 @@ public class MessageSendExecutor {
         loader.unLoad();
     }
 
-    public <T> T execute(Class<T> rpcInterface) throws Exception {
-        return (T) Reflection.newProxy(rpcInterface, new MessageSendProxy<T>());
+    public <T> T execute(Class<T> rpcInterface) {
+        return Reflection.newProxy(rpcInterface, new MessageSendProxy<T>());
     }
+
 }
 

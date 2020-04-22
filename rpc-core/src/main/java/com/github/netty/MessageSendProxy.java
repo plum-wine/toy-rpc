@@ -1,4 +1,3 @@
-
 package com.github.netty;
 
 import com.google.common.reflect.AbstractInvocationHandler;
@@ -24,5 +23,6 @@ public class MessageSendProxy<T> extends AbstractInvocationHandler {
         MessageCallBack callBack = handler.sendRequest(request);
         return callBack.start();
     }
+
 }
 
