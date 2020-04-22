@@ -1,7 +1,11 @@
 package com.github.core;
 
+import com.github.core.service.HelloService;
+import com.github.event.ClientStopEventListener;
 import com.github.netty.MessageRecvExecutor;
+import com.github.netty.MessageSendExecutor;
 import com.github.serialize.RpcSerializeProtocol;
+import com.google.common.eventbus.EventBus;
 
 /**
  * @author hangs.zhang
@@ -11,12 +15,18 @@ import com.github.serialize.RpcSerializeProtocol;
  */
 public class BootServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         MessageRecvExecutor ref = MessageRecvExecutor.getInstance();
-        ref.setServerAddress("127.0.0.1:18887");
-        ref.setEchoApiPort(Integer.parseInt("18888"));
-        ref.setSerializeProtocol(Enum.valueOf(RpcSerializeProtocol.class, "PROTOSTUFFSERIALIZE"));
+        ref.setServerAddress(CommonConfig.ipAddr);
+        ref.setEchoApiPort(Integer.parseInt(CommonConfig.echoApiPort));
+        ref.setSerializeProtocol(Enum.valueOf(RpcSerializeProtocol.class, CommonConfig.SERIALIZE));
         ref.start();
+
+        EventBus eventBus = new EventBus();
+        HelloService execute = MessageSendExecutor.getInstance().execute(HelloService.class);
+        MessageSendExecutor.getInstance().setRpcServerLoader(CommonConfig.ipAddr, RpcSerializeProtocol.valueOf(CommonConfig.SERIALIZE));
+        ClientStopEventListener listener = new ClientStopEventListener();
+        eventBus.register(listener);
     }
 
 }
