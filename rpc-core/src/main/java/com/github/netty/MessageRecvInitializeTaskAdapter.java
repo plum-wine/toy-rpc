@@ -5,8 +5,8 @@ import com.github.model.MessageResponse;
 
 import java.util.Map;
 
-
 public class MessageRecvInitializeTaskAdapter extends AbstractMessageRecvInitializeTask {
+
     public MessageRecvInitializeTaskAdapter(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         super(request, response, handlerMap);
     }
@@ -40,5 +40,6 @@ public class MessageRecvInitializeTaskAdapter extends AbstractMessageRecvInitial
     protected void release() {
 
     }
+
 }
 

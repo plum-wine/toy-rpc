@@ -1,4 +1,3 @@
-
 package com.github.netty;
 
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +12,7 @@ import com.github.serialize.RpcSerializeProtocol;
 public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private RpcSerializeProtocol protocol;
+
     private RpcRecvSerializeFrame frame = null;
 
     MessageRecvChannelInitializer buildRpcSerializeProtocol(RpcSerializeProtocol protocol) {
@@ -24,9 +24,13 @@ public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChan
         frame = new RpcRecvSerializeFrame(handlerMap);
     }
 
+    /**
+     * netty的初始化channel
+     */
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
         frame.select(protocol, pipeline);
     }
+
 }

@@ -1,4 +1,3 @@
-
 package com.github.compiler;
 
 import com.github.compiler.weaver.ClassProxy;
@@ -11,6 +10,7 @@ import java.util.regex.Pattern;
 
 
 public abstract class AbstractAccessAdaptive implements Compiler {
+
     private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([$_a-zA-Z][$_a-zA-Z0-9\\.]*);");
 
     private static final Pattern CLASS_PATTERN = Pattern.compile("class\\s+([$_a-zA-Z][$_a-zA-Z0-9]*)\\s+");
@@ -18,8 +18,12 @@ public abstract class AbstractAccessAdaptive implements Compiler {
     private static final String CLASS_END_FLAG = "}";
 
     protected ClassProxy factory = new ProxyProvider();
+
     protected NativeCompiler compiler = null;
 
+    /**
+     * 覆盖类加载器
+     */
     protected ClassLoader overrideThreadContextClassLoader(ClassLoader loader) {
         Thread currentThread = Thread.currentThread();
         ClassLoader threadContextClassLoader = currentThread.getContextClassLoader();
@@ -35,7 +39,7 @@ public abstract class AbstractAccessAdaptive implements Compiler {
         ClassLoader cl = null;
         try {
             cl = Thread.currentThread().getContextClassLoader();
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
         }
         if (cl == null) {
             cl = AbstractAccessAdaptive.class.getClassLoader();
@@ -107,5 +111,6 @@ public abstract class AbstractAccessAdaptive implements Compiler {
     public ClassProxy getFactory() {
         return factory;
     }
+
 }
 

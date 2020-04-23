@@ -3,12 +3,7 @@ package com.github.parallel;
 import com.github.core.RpcSystemConfig;
 import com.github.jmx.ThreadPoolMonitorProvider;
 import com.github.jmx.ThreadPoolStatus;
-import com.github.parallel.policy.AbortPolicy;
-import com.github.parallel.policy.BlockingPolicy;
-import com.github.parallel.policy.CallerRunsPolicy;
-import com.github.parallel.policy.DiscardedPolicy;
-import com.github.parallel.policy.RejectedPolicy;
-import com.github.parallel.policy.RejectedPolicyType;
+import com.github.parallel.policy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,14 +15,7 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.*;
 
 
 public class RpcThreadPool {
@@ -85,7 +73,6 @@ public class RpcThreadPool {
     public static Executor getExecutorWithJmx(int threads, int queues) {
         final ThreadPoolExecutor executor = (ThreadPoolExecutor) getExecutor(threads, queues);
         TIMER.scheduleAtFixedRate(new TimerTask() {
-
             @Override
             public void run() {
                 ThreadPoolStatus status = new ThreadPoolStatus();
@@ -99,16 +86,8 @@ public class RpcThreadPool {
 
                 try {
                     ThreadPoolMonitorProvider.monitor(status);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (MalformedObjectNameException e) {
-                    e.printStackTrace();
-                } catch (ReflectionException e) {
-                    e.printStackTrace();
-                } catch (MBeanException e) {
-                    e.printStackTrace();
-                } catch (InstanceNotFoundException e) {
-                    e.printStackTrace();
+                } catch (IOException | MalformedObjectNameException | ReflectionException | MBeanException | InstanceNotFoundException e) {
+                    LOGGER.error("getExecutorWithJmx error", e);
                 }
             }
         }, monitorDelay, monitorDelay);

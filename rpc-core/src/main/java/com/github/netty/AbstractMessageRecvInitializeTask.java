@@ -1,4 +1,3 @@
-
 package com.github.netty;
 
 import com.github.core.Modular;
@@ -8,23 +7,35 @@ import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 import com.github.spring.BeanFactoryUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 
 public abstract class AbstractMessageRecvInitializeTask implements Callable<Boolean> {
+
     protected MessageRequest request = null;
+
     protected MessageResponse response = null;
+
     protected Map<String, Object> handlerMap = null;
+
     protected static final String METHOD_MAPPED_NAME = "invoke";
+
     protected boolean returnNotNull = true;
+
     protected long invokeTimespan;
+
     protected Modular modular = BeanFactoryUtils.getBean("modular");
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public AbstractMessageRecvInitializeTask(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         this.request = request;
@@ -39,7 +50,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
             response.setMessageId(request.getMessageId());
             injectInvoke();
             Object result = reflect(request);
-            boolean isInvokeSucc = ((returnNotNull && result != null) || !returnNotNull);
+            boolean isInvokeSucc = (!returnNotNull || result != null);
             if (isInvokeSucc) {
                 response.setResult(result);
                 response.setError("");
@@ -54,8 +65,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
             return Boolean.TRUE;
         } catch (Throwable t) {
             response.setError(getStackTrace(t));
-            t.printStackTrace();
-            System.err.printf("RPC Server invoke error!\n");
+            LOGGER.error("RPC Server invoke error!", t);
             injectFailInvoke(t);
             return Boolean.FALSE;
         } finally {
@@ -139,5 +149,6 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
     protected abstract void acquire();
 
     protected abstract void release();
+
 }
 

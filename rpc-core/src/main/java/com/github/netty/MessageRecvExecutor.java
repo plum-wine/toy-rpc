@@ -38,6 +38,9 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
 
+    /**
+     * 切割ip与port
+     */
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
 
     private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
@@ -46,9 +49,13 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private static int queueNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
 
+    /**
+     * guava的线程池,能够添加监听器
+     * 用于处理请求
+     */
     private static volatile ListeningExecutorService threadPoolExecutor;
 
-    private Map<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
+    private Map<String, Object> handlerMap = new ConcurrentHashMap<>();
 
     private int numberOfEchoThreadsPool = 1;
 
@@ -66,6 +73,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
     }
 
     private static class MessageRecvExecutorHolder {
+        // 单例
         static final MessageRecvExecutor INSTANCE = new MessageRecvExecutor();
     }
 
@@ -74,10 +82,12 @@ public class MessageRecvExecutor implements ApplicationContextAware {
     }
 
     public static void submit(Callable<Boolean> task, final ChannelHandlerContext ctx, final MessageRequest request, final MessageResponse response) {
+        // 保证threadPoolExecutor的单例
         if (threadPoolExecutor == null) {
             synchronized (MessageRecvExecutor.class) {
                 if (threadPoolExecutor == null) {
-                    threadPoolExecutor = MoreExecutors.listeningDecorator((ThreadPoolExecutor) (RpcSystemConfig.isMonitorServerSupport() ? RpcThreadPool.getExecutorWithJmx(threadNums, queueNums) : RpcThreadPool.getExecutor(threadNums, queueNums)));
+                    threadPoolExecutor = MoreExecutors.listeningDecorator((ThreadPoolExecutor) (RpcSystemConfig.isMonitorServerSupport() ?
+                            RpcThreadPool.getExecutorWithJmx(threadNums, queueNums) : RpcThreadPool.getExecutor(threadNums, queueNums)));
                 }
             }
         }
@@ -86,17 +96,18 @@ public class MessageRecvExecutor implements ApplicationContextAware {
         Futures.addCallback(listenableFuture, new FutureCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
+                // 将消息刷新到client
                 ctx.writeAndFlush(response).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        LOGGER.info("RPC Server Send message-id respone:{}", request.getMessageId());
+                        LOGGER.info("RPC Server Send message-id response:{}", request.getMessageId());
                     }
                 });
             }
 
             @Override
             public void onFailure(@NotNull Throwable throwable) {
-                LOGGER.error("onFailure", throwable);
+                LOGGER.error("send response failure", throwable);
             }
         }, threadPoolExecutor);
     }
@@ -128,6 +139,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                 final String host = ipAddr[0];
                 final int port = Integer.parseInt(ipAddr[1]);
                 ChannelFuture future = bootstrap.bind(host, port).sync();
+                // 启动监听
                 future.addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
@@ -137,13 +149,6 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                             completionService.submit(new ApiEchoResolver(host, echoApiPort));
                             LOGGER.info("RPC Server start success!");
                             LOGGER.info("ip:{} port:{} protocol:{}", host, port, serializeProtocol);
-
-//                            channelFuture.channel().closeFuture().sync().addListener(new ChannelFutureListener() {
-//                                @Override
-//                                public void operationComplete(ChannelFuture future) throws Exception {
-//                                    executor.shutdownNow();
-//                                }
-//                            });
                         }
                     }
                 });
@@ -155,6 +160,9 @@ public class MessageRecvExecutor implements ApplicationContextAware {
         }
     }
 
+    /**
+     * 关闭server
+     */
     public void stop() {
         worker.shutdownGracefully();
         boss.shutdownGracefully();
