@@ -7,6 +7,7 @@ import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 import com.github.spring.BeanFactoryUtils;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
@@ -18,7 +19,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-
+@Data
 public abstract class AbstractMessageRecvInitializeTask implements Callable<Boolean> {
 
     protected MessageRequest request = null;
@@ -49,6 +50,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
             acquire();
             response.setMessageId(request.getMessageId());
             injectInvoke();
+            // 处理请求
             Object result = reflect(request);
             boolean isInvokeSucc = (!returnNotNull || result != null);
             if (isInvokeSucc) {
@@ -57,7 +59,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
                 response.setReturnNotNull(returnNotNull);
                 injectSuccInvoke(invokeTimespan);
             } else {
-                System.err.println(RpcSystemConfig.FILTER_RESPONSE_MSG);
+                LOGGER.info(RpcSystemConfig.FILTER_RESPONSE_MSG);
                 response.setResult(null);
                 response.setError(RpcSystemConfig.FILTER_RESPONSE_MSG);
                 injectFilterInvoke();
@@ -78,7 +80,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
             ModuleProvider provider = modular.invoke(new ModuleInvoker() {
 
                 @Override
-                public Class getInterface() {
+                public Class<?> getInterface() {
                     return mi.getClass().getInterfaces()[0];
                 }
 
@@ -114,28 +116,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
     public String getStackTrace(Throwable ex) {
         StringWriter buf = new StringWriter();
         ex.printStackTrace(new PrintWriter(buf));
-
         return buf.toString();
-    }
-
-    public boolean isReturnNotNull() {
-        return returnNotNull;
-    }
-
-    public void setReturnNotNull(boolean returnNotNull) {
-        this.returnNotNull = returnNotNull;
-    }
-
-    public MessageResponse getResponse() {
-        return response;
-    }
-
-    public MessageRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(MessageRequest request) {
-        this.request = request;
     }
 
     protected abstract void injectInvoke();

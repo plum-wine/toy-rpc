@@ -37,9 +37,9 @@ public class RpcSystemConfig {
 
     public static final String RPC_ABILITY_DETAIL_SPI_ATTR = "com.github.core.AbilityDetail";
 
-    public static final String FILTER_RESPONSE_MSG = "Illegal request,NettyRPC server refused to respond!";
+    public static final String FILTER_RESPONSE_MSG = "Illegal Request,RPC Server Refused To Respond!";
 
-    public static final String TIMEOUT_RESPONSE_MSG = "Timeout request,NettyRPC server request timeout!";
+    public static final String TIMEOUT_RESPONSE_MSG = "Timeout Request,RPC Server Request Timeout!";
 
     public static final int SERIALIZE_POOL_MAX_TOTAL = 500;
 
