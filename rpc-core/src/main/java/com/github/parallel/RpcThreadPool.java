@@ -9,12 +9,15 @@ import com.github.parallel.policy.CallerRunsPolicy;
 import com.github.parallel.policy.DiscardedPolicy;
 import com.github.parallel.policy.RejectedPolicy;
 import com.github.parallel.policy.RejectedPolicyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ReflectionException;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
@@ -28,9 +31,14 @@ import java.util.concurrent.RejectedExecutionHandler;
 
 
 public class RpcThreadPool {
+
     private static final Timer TIMER = new Timer("ThreadPoolMonitor", true);
+
     private static long monitorDelay = 100L;
+
     private static long monitorPeriod = 300L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static RejectedExecutionHandler createPolicy() {
         RejectedPolicyType rejectedPolicyType = RejectedPolicyType.fromString(System.getProperty(RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_REJECTED_POLICY_ATTR, "AbortPolicy"));
@@ -46,12 +54,9 @@ public class RpcThreadPool {
                 return new RejectedPolicy();
             case DISCARDED_POLICY:
                 return new DiscardedPolicy();
-            default: {
-                break;
-            }
+            default:
+                throw new RuntimeException();
         }
-
-        return null;
     }
 
     private static BlockingQueue<Runnable> createBlockingQueue(int queues) {
@@ -59,26 +64,22 @@ public class RpcThreadPool {
 
         switch (queueType) {
             case LINKED_BLOCKING_QUEUE:
-                return new LinkedBlockingQueue<Runnable>();
+                return new LinkedBlockingQueue<>();
             case ARRAY_BLOCKING_QUEUE:
-                return new ArrayBlockingQueue<Runnable>(RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * queues);
+                return new ArrayBlockingQueue<>(RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * queues);
             case SYNCHRONOUS_QUEUE:
-                return new SynchronousQueue<Runnable>();
-            default: {
-                break;
-            }
+                return new SynchronousQueue<>();
+            default:
+                throw new RuntimeException();
         }
-
-        return null;
     }
 
     public static Executor getExecutor(int threads, int queues) {
-        System.out.println("ThreadPool Core[threads:" + threads + ", queues:" + queues + "]");
+        LOGGER.info("ThreadPool Core [threads:{},queues:{}]", threads, queues);
         String name = "RpcThreadPool";
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
+        return new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
                 createBlockingQueue(queues),
                 new NamedThreadFactory(name, true), createPolicy());
-        return executor;
     }
 
     public static Executor getExecutorWithJmx(int threads, int queues) {

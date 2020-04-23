@@ -7,7 +7,7 @@
         </filter>
         <encoder charset="UTF-8">
             <!-- 不需要特殊格式 -->
-            <pattern>%date{HH:mm:ss} [%21.-21thread][%36.-36logger{36}]:%-3.3L : %msg%n</pattern>
+            <pattern>%date{HH:mm:ss} [%26.-26thread][%36.-36logger{36}]:%-3.3L : %msg%n</pattern>
         </encoder>
     </appender>
 
