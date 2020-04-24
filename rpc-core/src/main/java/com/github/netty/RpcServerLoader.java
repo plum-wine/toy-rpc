@@ -95,6 +95,8 @@ public class RpcServerLoader {
                     LOGGER.error("send request onFailure", t);
                 }
             }, threadPoolExecutor);
+        } else {
+            throw new RuntimeException();
         }
     }
 

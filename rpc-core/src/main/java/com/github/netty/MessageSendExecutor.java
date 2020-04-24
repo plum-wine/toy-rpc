@@ -3,6 +3,9 @@ package com.github.netty;
 import com.google.common.reflect.Reflection;
 import com.github.serialize.RpcSerializeProtocol;
 
+/**
+ * 请求发送执行器
+ */
 public class MessageSendExecutor {
 
     private static class MessageSendExecutorHolder {

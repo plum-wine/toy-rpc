@@ -1,6 +1,8 @@
 package com.github.core;
 
+import com.github.core.entity.Student;
 import com.github.core.service.HelloService;
+import com.github.core.service.StudentService;
 import com.github.netty.MessageSendExecutor;
 import com.github.serialize.RpcSerializeProtocol;
 import org.junit.Test;
@@ -20,11 +22,17 @@ public class Client {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
-    public void test() throws Exception {
+    public void client() throws Exception {
         HelloService execute = MessageSendExecutor.getInstance().execute(HelloService.class);
+        StudentService studentService = MessageSendExecutor.getInstance().execute(StudentService.class);
+
         MessageSendExecutor.getInstance().setRpcServerLoader(CommonConfig.ipAddr, RpcSerializeProtocol.valueOf(CommonConfig.SERIALIZE));
+
         String result = execute.sayHello();
         LOGGER.info("result:{}", result);
+
+        Student student = studentService.queryStudent(1);
+        LOGGER.info("stu:{}", student);
     }
 
 }
