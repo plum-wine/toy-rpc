@@ -126,7 +126,4 @@ public class RpcServerLoader {
         eventLoopGroup.shutdownGracefully();
     }
 
-    public void setSerializeProtocol(RpcSerializeProtocol serializeProtocol) {
-        this.serializeProtocol = serializeProtocol;
-    }
 }

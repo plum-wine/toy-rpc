@@ -19,10 +19,6 @@ public class MessageSendExecutor {
 
     }
 
-    public MessageSendExecutor(String serverAddress, RpcSerializeProtocol serializeProtocol) {
-        loader.load(serverAddress, serializeProtocol);
-    }
-
     public void setRpcServerLoader(String serverAddress, RpcSerializeProtocol serializeProtocol) {
         loader.load(serverAddress, serializeProtocol);
     }
