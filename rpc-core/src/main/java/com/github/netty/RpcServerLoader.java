@@ -23,6 +23,7 @@ public class RpcServerLoader {
 
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
 
+    // 默认序列化方式为native
     private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
 
     private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
@@ -76,11 +77,9 @@ public class RpcServerLoader {
                 public void onSuccess(Boolean result) {
                     try {
                         lock.lock();
-
                         if (messageSendHandler == null) {
                             handlerStatus.await();
                         }
-
                         if (result.equals(Boolean.TRUE) && messageSendHandler != null) {
                             connectStatus.signalAll();
                         }
@@ -93,7 +92,7 @@ public class RpcServerLoader {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    t.printStackTrace();
+                    LOGGER.error("send request onFailure", t);
                 }
             }, threadPoolExecutor);
         }

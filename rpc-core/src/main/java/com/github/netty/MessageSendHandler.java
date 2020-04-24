@@ -1,6 +1,8 @@
-
 package com.github.netty;
 
+import com.github.core.MessageCallBack;
+import com.github.model.MessageRequest;
+import com.github.model.MessageResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -10,15 +12,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import java.net.SocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.github.core.MessageCallBack;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
-
 
 public class MessageSendHandler extends ChannelInboundHandlerAdapter {
 
-    private ConcurrentHashMap<String, MessageCallBack> mapCallBack = new ConcurrentHashMap<String, MessageCallBack>();
+    private ConcurrentHashMap<String, MessageCallBack> mapCallBack = new ConcurrentHashMap<>();
+
     private volatile Channel channel;
+
     private SocketAddress remoteAddr;
 
     public Channel getChannel() {
@@ -68,4 +68,5 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
         channel.writeAndFlush(request);
         return callBack;
     }
+
 }

@@ -22,9 +22,9 @@ public class ApiEchoResolver implements Callable<Boolean> {
 
     private static final boolean SSL = System.getProperty("ssl") != null;
 
-    private String host;
+    private final String host;
 
-    private int port;
+    private final int port;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -64,5 +64,6 @@ public class ApiEchoResolver implements Callable<Boolean> {
             workerGroup.shutdownGracefully();
         }
     }
+
 }
 

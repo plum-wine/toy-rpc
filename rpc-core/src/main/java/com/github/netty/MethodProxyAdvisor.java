@@ -3,6 +3,7 @@ package com.github.netty;
 import com.github.filter.Filter;
 import com.github.filter.ServiceFilterBinder;
 import com.github.model.MessageRequest;
+import lombok.Data;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,21 +13,15 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-
+@Data
 public class MethodProxyAdvisor implements MethodInterceptor {
-    private Map<String, Object> handlerMap;
+
+    private final Map<String, Object> HANDLERS;
+
     private boolean returnNotNull = true;
 
-    public boolean isReturnNotNull() {
-        return returnNotNull;
-    }
-
-    public void setReturnNotNull(boolean returnNotNull) {
-        this.returnNotNull = returnNotNull;
-    }
-
     public MethodProxyAdvisor(Map<String, Object> handlerMap) {
-        this.handlerMap = handlerMap;
+        this.HANDLERS = handlerMap;
     }
 
     @Override
@@ -39,10 +34,12 @@ public class MethodProxyAdvisor implements MethodInterceptor {
         MessageRequest request = (MessageRequest) params[0];
 
         String className = request.getClassName();
-        Object serviceBean = handlerMap.get(className);
+        // 在织入过程中设置serviceBean
+        Object serviceBean = HANDLERS.get(className);
         String methodName = request.getMethodName();
         Object[] parameters = request.getParametersVal();
 
+        // 判断ServiceFilterBinder是否是service的父类
         boolean existFilter = ServiceFilterBinder.class.isAssignableFrom(serviceBean.getClass());
         ((MethodInvoker) invocation.getThis()).setServiceBean(existFilter ? ((ServiceFilterBinder) serviceBean).getObject() : serviceBean);
 
@@ -63,11 +60,11 @@ public class MethodProxyAdvisor implements MethodInterceptor {
                 }
             }
         }
-
         Object result = invocation.proceed();
         setReturnNotNull(result != null);
         return result;
     }
+
 }
 
 

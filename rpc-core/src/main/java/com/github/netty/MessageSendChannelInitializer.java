@@ -1,4 +1,3 @@
-
 package com.github.netty;
 
 import com.github.serialize.RpcSerializeProtocol;
@@ -22,4 +21,5 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
         ChannelPipeline pipeline = socketChannel.pipeline();
         frame.select(protocol, pipeline);
     }
+
 }

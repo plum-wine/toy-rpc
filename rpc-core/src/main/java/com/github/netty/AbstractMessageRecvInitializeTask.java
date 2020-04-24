@@ -75,6 +75,20 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
         }
     }
 
+    private Object reflect(MessageRequest request) throws Throwable {
+        ProxyFactory weaver = new ProxyFactory(new MethodInvoker());
+        NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor();
+        advisor.setMappedName(METHOD_MAPPED_NAME);
+        advisor.setAdvice(new MethodProxyAdvisor(handlerMap));
+        weaver.addAdvisor(advisor);
+        // 完成织入
+        MethodInvoker mi = (MethodInvoker) weaver.getProxy();
+        Object obj = invoke(mi, request);
+        invokeTimespan = mi.getInvokeTimespan();
+        setReturnNotNull(((MethodProxyAdvisor) advisor.getAdvice()).isReturnNotNull());
+        return obj;
+    }
+
     private Object invoke(MethodInvoker mi, MessageRequest request) throws Throwable {
         if (modular != null) {
             ModuleProvider provider = modular.invoke(new ModuleInvoker() {
@@ -98,19 +112,6 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
         } else {
             return mi.invoke(request);
         }
-    }
-
-    private Object reflect(MessageRequest request) throws Throwable {
-        ProxyFactory weaver = new ProxyFactory(new MethodInvoker());
-        NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor();
-        advisor.setMappedName(METHOD_MAPPED_NAME);
-        advisor.setAdvice(new MethodProxyAdvisor(handlerMap));
-        weaver.addAdvisor(advisor);
-        MethodInvoker mi = (MethodInvoker) weaver.getProxy();
-        Object obj = invoke(mi, request);
-        invokeTimespan = mi.getInvokeTimespan();
-        setReturnNotNull(((MethodProxyAdvisor) advisor.getAdvice()).isReturnNotNull());
-        return obj;
     }
 
     public String getStackTrace(Throwable ex) {
