@@ -1,8 +1,8 @@
 package com.github.netty;
 
 import com.github.core.ReflectionUtils;
-import com.github.event.*;
 import com.github.event.AbstractInvokeEventBus.ModuleEvent;
+import com.github.event.*;
 import com.github.filter.ServiceFilterBinder;
 import com.github.jmx.ModuleMetricsHandler;
 import com.github.jmx.ModuleMetricsVisitor;
@@ -16,10 +16,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MessageRecvInitializeTask extends AbstractMessageRecvInitializeTask {
-    private AtomicReference<ModuleMetricsVisitor> visitor = new AtomicReference<ModuleMetricsVisitor>();
-    private AtomicReference<InvokeEventBusFacade> facade = new AtomicReference<InvokeEventBusFacade>();
-    private AtomicReference<InvokeEventWatcher> watcher = new AtomicReference<InvokeEventWatcher>(new InvokeEventWatcher());
-    private SemaphoreWrapperFactory factory = SemaphoreWrapperFactory.getInstance();
+
+    private final AtomicReference<ModuleMetricsVisitor> visitor = new AtomicReference<>();
+
+    private final AtomicReference<InvokeEventBusFacade> facade = new AtomicReference<>();
+
+    private final AtomicReference<InvokeEventWatcher> watcher = new AtomicReference<>(new InvokeEventWatcher());
+
+    private final SemaphoreWrapperFactory factory = SemaphoreWrapperFactory.getInstance();
 
     public MessageRecvInitializeTask(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         super(request, response, handlerMap);
@@ -27,7 +31,7 @@ public class MessageRecvInitializeTask extends AbstractMessageRecvInitializeTask
 
     @Override
     protected void injectInvoke() {
-        Class cls = handlerMap.get(request.getClassName()).getClass();
+        Class<?> cls = handlerMap.get(request.getClassName()).getClass();
         boolean binder = ServiceFilterBinder.class.isAssignableFrom(cls);
         if (binder) {
             cls = ((ServiceFilterBinder) handlerMap.get(request.getClassName())).getObject().getClass();
@@ -75,4 +79,5 @@ public class MessageRecvInitializeTask extends AbstractMessageRecvInitializeTask
     protected void release() {
         factory.release();
     }
+
 }

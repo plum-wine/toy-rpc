@@ -1,4 +1,3 @@
-
 package com.github.netty.resolver;
 
 import com.github.core.AbilityDetailProvider;
@@ -29,7 +28,7 @@ public class ApiEchoHandler extends ChannelInboundHandlerAdapter {
 
     private static final String METRICS = "metrics";
 
-    private static final String METRICS_ERR_MSG = "NettyRPC rpc.jmx.invoke.metrics attribute is closed!";
+    private static final String METRICS_ERR_MSG = "rpc.jmx.invoke.metrics attribute is closed!";
 
     public ApiEchoHandler() {
     }

@@ -1,5 +1,6 @@
 package com.github.spring.annotation;
 
+import com.github.spring.RpcReferenceRegister;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 

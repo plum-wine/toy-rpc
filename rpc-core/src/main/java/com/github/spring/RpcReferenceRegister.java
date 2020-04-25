@@ -1,5 +1,6 @@
-package com.github.spring.annotation;
+package com.github.spring;
 
+import com.github.spring.annotation.RpcReference;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

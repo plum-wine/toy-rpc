@@ -23,8 +23,6 @@ public class RpcRegistery implements InitializingBean, DisposableBean {
 
     private String echoApiPort;
 
-//    private AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-
     @Override
     public void destroy() throws Exception {
         MessageRecvExecutor.getInstance().stop();
@@ -40,19 +38,7 @@ public class RpcRegistery implements InitializingBean, DisposableBean {
         ref.setServerAddress(ipAddr);
         ref.setEchoApiPort(Integer.parseInt(echoApiPort));
         ref.setSerializeProtocol(Enum.valueOf(RpcSerializeProtocol.class, protocol));
-
-//        if (RpcSystemConfig.isMonitorServerSupport()) {
-//            context.register(ThreadPoolMonitorProvider.class);
-//            context.refresh();
-//        }
-
         ref.start();
-
-//        if (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT) {
-//            HashModuleMetricsVisitor visitor = HashModuleMetricsVisitor.getInstance();
-//            visitor.signal();
-//            ModuleMetricsHandler handler = ModuleMetricsHandler.getInstance();
-//            handler.start();
-//        }
     }
+
 }
