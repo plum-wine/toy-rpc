@@ -1,5 +1,5 @@
 
-package com.github.netty;
+package com.github.netty.server;
 
 import com.github.compiler.AccessAdaptiveProvider;
 import com.github.core.AbilityDetailProvider;
@@ -72,8 +72,10 @@ public class MessageRecvExecutor implements ApplicationContextAware {
         register();
     }
 
+    /**
+     * 单例
+     */
     private static class MessageRecvExecutorHolder {
-        // 单例
         static final MessageRecvExecutor INSTANCE = new MessageRecvExecutor();
     }
 
@@ -83,6 +85,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     public static void submit(Callable<Boolean> task, final ChannelHandlerContext ctx, final MessageRequest request, final MessageResponse response) {
         // 保证threadPoolExecutor的单例
+        // 双重检查
         if (threadPoolExecutor == null) {
             synchronized (MessageRecvExecutor.class) {
                 if (threadPoolExecutor == null) {

@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.client;
 
 import com.github.netty.handler.JdkNativeSendHandler;
 import com.github.netty.handler.NettyRpcSendHandler;
@@ -12,7 +12,7 @@ import io.netty.channel.ChannelPipeline;
 
 public class RpcSendSerializeFrame implements RpcSerializeFrame {
 
-    private static ClassToInstanceMap<NettyRpcSendHandler> HANDLER = MutableClassToInstanceMap.create();
+    private static final ClassToInstanceMap<NettyRpcSendHandler> HANDLER = MutableClassToInstanceMap.create();
 
     static {
         HANDLER.putInstance(JdkNativeSendHandler.class, new JdkNativeSendHandler());
@@ -35,5 +35,6 @@ public class RpcSendSerializeFrame implements RpcSerializeFrame {
             }
         }
     }
+
 }
 

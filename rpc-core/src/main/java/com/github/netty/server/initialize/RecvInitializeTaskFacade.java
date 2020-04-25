@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.server.initialize;
 
 import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
@@ -10,15 +10,15 @@ import java.util.concurrent.Callable;
 
 public class RecvInitializeTaskFacade {
 
-    private MessageRequest request;
+    private final MessageRequest request;
 
-    private MessageResponse response;
+    private final MessageResponse response;
 
-    private Map<String, Object> handlerMap;
+    private final Map<String, Object> handlerMap;
 
-    private boolean isMetrics = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT;
+    private final boolean isMetrics = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT;
 
-    private boolean jmxMetricsHash = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_HASH_SUPPORT;
+    private final boolean jmxMetricsHash = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_HASH_SUPPORT;
 
     public RecvInitializeTaskFacade(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         this.request = request;

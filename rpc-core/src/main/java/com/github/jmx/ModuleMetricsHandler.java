@@ -1,7 +1,7 @@
 
 package com.github.jmx;
 
-import com.github.netty.MessageRecvExecutor;
+import com.github.netty.server.MessageRecvExecutor;
 import com.github.parallel.AbstractDaemonThread;
 import com.github.parallel.SemaphoreWrapper;
 import org.apache.commons.collections.Predicate;

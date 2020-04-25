@@ -1,6 +1,5 @@
 package com.github.netty.client;
 
-import com.github.netty.RpcSendSerializeFrame;
 import com.github.serialize.SerializeProtocol;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

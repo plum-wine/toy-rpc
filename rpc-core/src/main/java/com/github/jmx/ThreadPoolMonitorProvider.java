@@ -9,7 +9,7 @@ import org.springframework.jmx.support.ConnectorServerFactoryBean;
 import org.springframework.jmx.support.MBeanServerConnectionFactoryBean;
 import org.springframework.jmx.support.MBeanServerFactoryBean;
 import org.springframework.remoting.rmi.RmiRegistryFactoryBean;
-import com.github.netty.MessageRecvExecutor;
+import com.github.netty.server.MessageRecvExecutor;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.management.MBeanServerConnection;

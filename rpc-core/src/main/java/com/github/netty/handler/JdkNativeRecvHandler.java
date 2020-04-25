@@ -1,6 +1,6 @@
 package com.github.netty.handler;
 
-import com.github.netty.MessageRecvHandler;
+import com.github.netty.server.MessageRecvHandler;
 import com.github.serialize.MessageCodecUtil;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;

@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.server.proxy;
 
 import com.github.filter.Filter;
 import com.github.filter.ServiceFilterBinder;

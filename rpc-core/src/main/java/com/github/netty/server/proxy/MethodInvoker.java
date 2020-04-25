@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.server.proxy;
 
 import com.github.model.MessageRequest;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class MethodInvoker {
         Object[] parameters = request.getParametersVal();
         sw.reset();
         sw.start();
-        //
+        // 服务端执行请求
         Object result = MethodUtils.invokeMethod(serviceBean, methodName, parameters);
         sw.stop();
         return result;

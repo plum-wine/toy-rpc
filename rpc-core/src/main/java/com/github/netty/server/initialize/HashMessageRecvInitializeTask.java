@@ -1,5 +1,4 @@
-
-package com.github.netty;
+package com.github.netty.server.initialize;
 
 import com.github.core.ReflectionUtils;
 import com.github.filter.ServiceFilterBinder;
@@ -7,6 +6,7 @@ import com.github.jmx.HashModuleMetricsVisitor;
 import com.github.jmx.ModuleMetricsVisitor;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
+import com.github.netty.server.initialize.AbstractMessageRecvInitializeTask;
 import com.github.parallel.HashCriticalSection;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.iterators.FilterIterator;
@@ -20,9 +20,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 public class HashMessageRecvInitializeTask extends AbstractMessageRecvInitializeTask {
+
     private int hashKey = 0;
-    private static HashCriticalSection criticalSection = new HashCriticalSection();
-    private AtomicReference<ModuleMetricsVisitor> visitor = new AtomicReference<ModuleMetricsVisitor>();
+
+    private static final HashCriticalSection criticalSection = new HashCriticalSection();
+
+    private final AtomicReference<ModuleMetricsVisitor> visitor = new AtomicReference<>();
 
     public HashMessageRecvInitializeTask(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         super(request, response, handlerMap);
@@ -129,5 +132,6 @@ public class HashMessageRecvInitializeTask extends AbstractMessageRecvInitialize
     private void incrementInvokFilter(ModuleMetricsVisitor visitor) {
         visitor.incrementInvokeFilterCount();
     }
+
 }
 

@@ -6,7 +6,7 @@ import com.github.core.service.IHelloService;
 import com.github.core.service.IStudentService;
 import com.github.core.service.StudentService;
 import com.github.filter.ServiceFilterBinder;
-import com.github.netty.MessageRecvExecutor;
+import com.github.netty.server.MessageRecvExecutor;
 import com.github.serialize.SerializeProtocol;
 
 /**

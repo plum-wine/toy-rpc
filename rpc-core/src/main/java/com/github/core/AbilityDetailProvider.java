@@ -1,6 +1,6 @@
 package com.github.core;
 
-import com.github.netty.MessageRecvExecutor;
+import com.github.netty.server.MessageRecvExecutor;
 
 import java.util.Iterator;
 import java.util.Map;

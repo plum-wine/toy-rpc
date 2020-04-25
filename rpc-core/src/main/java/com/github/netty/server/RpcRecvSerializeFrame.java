@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.server;
 
 import com.github.netty.handler.NettyRpcRecvHandler;
 import com.github.netty.handler.JdkNativeRecvHandler;

@@ -2,7 +2,7 @@ package com.github.spring;
 
 import com.github.core.RpcSystemConfig;
 import com.github.jmx.ModuleMetricsHandler;
-import com.github.netty.MessageRecvExecutor;
+import com.github.netty.server.MessageRecvExecutor;
 import com.github.serialize.SerializeProtocol;
 import lombok.Data;
 import org.springframework.beans.factory.DisposableBean;
