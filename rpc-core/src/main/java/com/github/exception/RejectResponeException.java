@@ -2,6 +2,7 @@ package com.github.exception;
 
 
 public class RejectResponeException extends RuntimeException {
+
     public RejectResponeException() {
         super();
     }
@@ -17,5 +18,6 @@ public class RejectResponeException extends RuntimeException {
     public RejectResponeException(Throwable cause) {
         super(cause);
     }
+
 }
 

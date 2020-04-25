@@ -1,4 +1,4 @@
-package com.github.filter.support;
+package com.github.core.filter;
 
 import com.github.core.ModuleInvoker;
 import com.github.filter.ChainFilter;

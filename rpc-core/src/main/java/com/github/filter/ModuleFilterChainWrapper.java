@@ -1,16 +1,19 @@
-
 package com.github.filter;
 
 import com.github.core.Modular;
 import com.github.core.ModuleInvoker;
 import com.github.core.ModuleProvider;
 import com.github.model.MessageRequest;
+import lombok.Getter;
 
 import java.util.List;
 
 
 public class ModuleFilterChainWrapper implements Modular {
-    private Modular modular;
+
+    private final Modular modular;
+
+    @Getter
     private List<ChainFilter> filters;
 
     public ModuleFilterChainWrapper(Modular modular) {
@@ -58,12 +61,5 @@ public class ModuleFilterChainWrapper implements Modular {
         return last;
     }
 
-    public List<ChainFilter> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(List<ChainFilter> filters) {
-        this.filters = filters;
-    }
 }
 

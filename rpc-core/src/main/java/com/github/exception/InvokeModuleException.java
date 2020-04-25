@@ -2,6 +2,7 @@ package com.github.exception;
 
 
 public class InvokeModuleException extends RuntimeException {
+
     public InvokeModuleException() {
         super();
     }
@@ -17,5 +18,6 @@ public class InvokeModuleException extends RuntimeException {
     public InvokeModuleException(Throwable cause) {
         super(cause);
     }
+
 }
 
