@@ -1,4 +1,3 @@
-
 package com.github.event;
 
 import com.github.jmx.ModuleMetricsHandler;

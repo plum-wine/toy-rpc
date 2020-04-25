@@ -1,7 +1,5 @@
 package com.github.spring;
 
-import com.github.core.RpcSystemConfig;
-import com.github.jmx.ModuleMetricsHandler;
 import com.github.netty.server.MessageRecvExecutor;
 import com.github.serialize.SerializeProtocol;
 import lombok.Data;
@@ -24,16 +22,12 @@ public class RpcRegistery implements InitializingBean, DisposableBean {
     private String echoApiPort;
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         MessageRecvExecutor.getInstance().stop();
-        if (RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT) {
-            ModuleMetricsHandler handler = ModuleMetricsHandler.getInstance();
-            handler.stop();
-        }
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         MessageRecvExecutor ref = MessageRecvExecutor.getInstance();
         ref.setServerAddress(ipAddr);
         ref.setEchoApiPort(Integer.parseInt(echoApiPort));

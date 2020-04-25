@@ -1,30 +1,15 @@
 package com.github.parallel;
 
 import com.github.core.RpcSystemConfig;
-import com.github.jmx.ThreadPoolMonitorProvider;
-import com.github.jmx.ThreadPoolStatus;
 import com.github.parallel.policy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanException;
-import javax.management.MalformedObjectNameException;
-import javax.management.ReflectionException;
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
 
 public class RpcThreadPool {
-
-    private static final Timer TIMER = new Timer("ThreadPoolMonitor", true);
-
-    private static long monitorDelay = 100L;
-
-    private static long monitorPeriod = 300L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -68,30 +53,6 @@ public class RpcThreadPool {
         return new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
                 createBlockingQueue(queues),
                 new NamedThreadFactory(name, true), createPolicy());
-    }
-
-    public static Executor getExecutorWithJmx(int threads, int queues) {
-        final ThreadPoolExecutor executor = (ThreadPoolExecutor) getExecutor(threads, queues);
-        TIMER.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                ThreadPoolStatus status = new ThreadPoolStatus();
-                status.setPoolSize(executor.getPoolSize());
-                status.setActiveCount(executor.getActiveCount());
-                status.setCorePoolSize(executor.getCorePoolSize());
-                status.setMaximumPoolSize(executor.getMaximumPoolSize());
-                status.setLargestPoolSize(executor.getLargestPoolSize());
-                status.setTaskCount(executor.getTaskCount());
-                status.setCompletedTaskCount(executor.getCompletedTaskCount());
-
-                try {
-                    ThreadPoolMonitorProvider.monitor(status);
-                } catch (IOException | MalformedObjectNameException | ReflectionException | MBeanException | InstanceNotFoundException e) {
-                    LOGGER.error("getExecutorWithJmx error", e);
-                }
-            }
-        }, monitorDelay, monitorDelay);
-        return executor;
     }
 
 }
