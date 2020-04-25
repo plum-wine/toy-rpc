@@ -1,14 +1,10 @@
 package com.github.netty.server.initialize;
 
-import com.github.core.Modular;
-import com.github.core.ModuleInvoker;
-import com.github.core.ModuleProvider;
 import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 import com.github.netty.server.proxy.MethodInvoker;
 import com.github.netty.server.proxy.MethodProxyAdvisor;
-import com.github.spring.BeanFactoryUtils;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +31,6 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
     protected boolean returnNotNull = true;
 
     protected long invokeTimespan;
-
-    protected Modular modular = BeanFactoryUtils.getBean("modular");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -92,28 +86,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
     }
 
     private Object invoke(MethodInvoker mi, MessageRequest request) throws Throwable {
-        if (modular != null) {
-            ModuleProvider provider = modular.invoke(new ModuleInvoker() {
-
-                @Override
-                public Class<?> getInterface() {
-                    return mi.getClass().getInterfaces()[0];
-                }
-
-                @Override
-                public Object invoke(MessageRequest request) throws Throwable {
-                    return mi.invoke(request);
-                }
-
-                @Override
-                public void destroy() {
-
-                }
-            }, request);
-            return provider.getInvoker().invoke(request);
-        } else {
-            return mi.invoke(request);
-        }
+        return mi.invoke(request);
     }
 
     public String getStackTrace(Throwable ex) {

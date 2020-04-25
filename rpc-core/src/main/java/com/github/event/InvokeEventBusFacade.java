@@ -8,7 +8,8 @@ import java.util.Map;
 
 
 public class InvokeEventBusFacade {
-    private static Map<AbstractInvokeEventBus.ModuleEvent, AbstractInvokeEventBus> enumMap = new EnumMap<AbstractInvokeEventBus.ModuleEvent, AbstractInvokeEventBus>(AbstractInvokeEventBus.ModuleEvent.class);
+
+    private static final Map<AbstractInvokeEventBus.ModuleEvent, AbstractInvokeEventBus> enumMap = new EnumMap<>(AbstractInvokeEventBus.ModuleEvent.class);
 
     static {
         enumMap.put(AbstractInvokeEventBus.ModuleEvent.INVOKE_EVENT, new InvokeEvent());
@@ -30,11 +31,7 @@ public class InvokeEventBusFacade {
     }
 
     public AbstractInvokeEventBus fetchEvent(AbstractInvokeEventBus.ModuleEvent event) {
-        if (enumMap.containsKey(event)) {
-            return enumMap.get(event);
-        } else {
-            return null;
-        }
+        return enumMap.getOrDefault(event, null);
     }
 }
 

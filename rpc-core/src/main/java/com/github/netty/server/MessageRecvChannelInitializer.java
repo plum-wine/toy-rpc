@@ -1,19 +1,19 @@
 package com.github.netty.server;
 
+import com.github.netty.serialize.RpcRecvSerializeFrame;
+import com.github.serialize.SerializeProtocol;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 
 import java.util.Map;
 
-import com.github.serialize.SerializeProtocol;
-
 
 public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private SerializeProtocol protocol;
 
-    private RpcRecvSerializeFrame frame = null;
+    private final RpcRecvSerializeFrame frame;
 
     MessageRecvChannelInitializer buildRpcSerializeProtocol(SerializeProtocol protocol) {
         this.protocol = protocol;

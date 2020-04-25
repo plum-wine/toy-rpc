@@ -1,8 +1,8 @@
-package com.github.netty.client;
+package com.github.netty.serialize;
 
-import com.github.netty.handler.JdkNativeSendHandler;
+import com.github.netty.handler.impl.JdkNativeSendHandler;
 import com.github.netty.handler.NettyRpcSendHandler;
-import com.github.netty.handler.ProtostuffSendHandler;
+import com.github.netty.handler.impl.ProtostuffSendHandler;
 import com.github.serialize.RpcSerializeFrame;
 import com.github.serialize.SerializeProtocol;
 import com.google.common.collect.ClassToInstanceMap;

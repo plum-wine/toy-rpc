@@ -10,7 +10,9 @@ import java.util.List;
 
 
 public class ModuleListenerChainWrapper implements Modular {
-    private Modular modular;
+
+    private final Modular modular;
+
     private List<ModuleListener> listeners;
 
     public ModuleListenerChainWrapper(Modular modular) {

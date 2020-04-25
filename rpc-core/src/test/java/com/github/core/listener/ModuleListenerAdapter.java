@@ -1,4 +1,4 @@
-package com.github.listener.support;
+package com.github.core.listener;
 
 import com.github.core.ModuleProvider;
 import com.github.listener.ModuleListener;
@@ -6,6 +6,7 @@ import com.github.model.MessageRequest;
 import org.apache.commons.lang3.StringUtils;
 
 public class ModuleListenerAdapter implements ModuleListener {
+
     @Override
     public void exported(ModuleProvider<?> provider, MessageRequest request) {
         System.out.println(StringUtils.center("[ModuleListenerAdapter##exported]", 48, "*"));
@@ -15,5 +16,6 @@ public class ModuleListenerAdapter implements ModuleListener {
     public void unExported(ModuleProvider<?> provider, MessageRequest request) {
         System.out.println(StringUtils.center("[ModuleListenerAdapter##unExported]", 48, "*"));
     }
+
 }
 

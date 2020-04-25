@@ -2,6 +2,7 @@ package com.github.event;
 
 
 public class ClientStopEvent {
+
     private final int message;
 
     public ClientStopEvent(int message) {
@@ -11,5 +12,6 @@ public class ClientStopEvent {
     public int getMessage() {
         return message;
     }
+
 }
 

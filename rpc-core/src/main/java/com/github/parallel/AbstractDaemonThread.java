@@ -2,9 +2,13 @@ package com.github.parallel;
 
 
 public abstract class AbstractDaemonThread implements Runnable {
+
     protected final Thread thread;
+
     private static final long JOIN_TIME = 90 * 1000L;
+
     protected volatile boolean hasNotified = false;
+
     protected volatile boolean stoped = false;
 
     public AbstractDaemonThread() {
@@ -105,5 +109,6 @@ public abstract class AbstractDaemonThread implements Runnable {
     public long getJoinTime() {
         return JOIN_TIME;
     }
+
 }
 

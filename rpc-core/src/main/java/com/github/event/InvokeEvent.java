@@ -6,7 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 public class InvokeEvent extends AbstractInvokeEventBus {
-    private AtomicLong sequenceInvokeNumber = new AtomicLong(0L);
+
+    private final AtomicLong sequenceInvokeNumber = new AtomicLong(0L);
 
     public InvokeEvent() {
         super();
@@ -21,5 +22,6 @@ public class InvokeEvent extends AbstractInvokeEventBus {
         return new AttributeChangeNotification(this, sequenceInvokeNumber.incrementAndGet(), System.currentTimeMillis(),
                 super.moduleName, super.methodName, ModuleEvent.INVOKE_EVENT.toString(), oldValue, newValue);
     }
+
 }
 

@@ -1,4 +1,3 @@
-
 package com.github.netty.server;
 
 import com.github.compiler.AccessAdaptiveProvider;
@@ -7,7 +6,6 @@ import com.github.core.RpcSystemConfig;
 import com.github.model.MessageKeyVal;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
-import com.github.netty.resolver.ApiEchoResolver;
 import com.github.parallel.NamedThreadFactory;
 import com.github.parallel.RpcThreadPool;
 import com.github.serialize.SerializeProtocol;
@@ -27,7 +25,10 @@ import org.springframework.context.ApplicationContextAware;
 import java.lang.invoke.MethodHandles;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Data
 public class MessageRecvExecutor implements ApplicationContextAware {
@@ -59,7 +60,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private int numberOfEchoThreadsPool = 1;
 
-    private ThreadFactory threadRpcFactory = new NamedThreadFactory("RPC-ThreadFactory");
+    private ThreadFactory threadRpcFactory = new NamedThreadFactory("Toy-ThreadFactory");
 
     private EventLoopGroup boss = new NioEventLoopGroup();
 
@@ -147,16 +148,16 @@ public class MessageRecvExecutor implements ApplicationContextAware {
                     @Override
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
                         if (channelFuture.isSuccess()) {
-                            final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
-                            ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
-                            completionService.submit(new ApiEchoResolver(host, echoApiPort));
+                            // final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
+                            // ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
+                            // completionService.submit(new ApiEchoResolver(host, echoApiPort));
                             LOGGER.info("RPC Server start success!");
                             LOGGER.info("ip:{} port:{} protocol:{}", host, port, serializeProtocol);
                         }
                     }
                 });
             } else {
-                LOGGER.info("RPC Server start fail!");
+                throw new RuntimeException("配置错误,请检查");
             }
         } catch (InterruptedException e) {
             LOGGER.info("RPC Server start error!", e);

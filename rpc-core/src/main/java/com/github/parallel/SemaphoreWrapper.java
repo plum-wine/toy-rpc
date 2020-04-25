@@ -5,7 +5,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class SemaphoreWrapper {
+
     protected final AtomicBoolean released = new AtomicBoolean(false);
+
     protected Semaphore semaphore;
 
     public SemaphoreWrapper() {
@@ -42,16 +44,9 @@ public class SemaphoreWrapper {
         }
     }
 
-    public void setSemaphore(Semaphore semaphore) {
-        this.semaphore = semaphore;
-    }
-
-    public Semaphore getSemaphore() {
-        return semaphore;
-    }
-
     public boolean isRelease() {
         return released.get();
     }
+
 }
 

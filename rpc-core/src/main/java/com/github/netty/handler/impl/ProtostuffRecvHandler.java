@@ -1,5 +1,6 @@
-package com.github.netty.handler;
+package com.github.netty.handler.impl;
 
+import com.github.netty.handler.NettyRpcRecvHandler;
 import com.github.netty.server.MessageRecvHandler;
 import com.github.serialize.protostuff.ProtostuffCodecUtil;
 import com.github.serialize.protostuff.ProtostuffDecoder;

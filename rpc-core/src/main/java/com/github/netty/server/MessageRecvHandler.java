@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
- * netty的处理器
+ * ChannelInboundHandlerAdapter netty的入站处理器接口
  */
 public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
 

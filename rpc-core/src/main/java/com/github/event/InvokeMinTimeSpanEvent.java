@@ -6,7 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 public class InvokeMinTimeSpanEvent extends AbstractInvokeEventBus {
-    private AtomicLong sequenceInvokeMinTimeSpanNumber = new AtomicLong(0L);
+
+    private final AtomicLong sequenceInvokeMinTimeSpanNumber = new AtomicLong(0L);
 
     public InvokeMinTimeSpanEvent() {
         super();

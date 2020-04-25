@@ -1,4 +1,3 @@
-
 package com.github.listener;
 
 import com.github.core.ModuleInvoker;
@@ -9,9 +8,12 @@ import java.util.List;
 
 
 public class ModuleProviderWrapper<T> implements ModuleProvider<T> {
-    private ModuleProvider<T> provider;
-    private MessageRequest request;
-    private List<ModuleListener> listeners;
+
+    private final ModuleProvider<T> provider;
+
+    private final MessageRequest request;
+
+    private final List<ModuleListener> listeners;
 
     public ModuleProviderWrapper(ModuleProvider<T> provider, List<ModuleListener> listeners, MessageRequest request) {
         if (provider == null) {
@@ -64,5 +66,6 @@ public class ModuleProviderWrapper<T> implements ModuleProvider<T> {
             }
         }
     }
+
 }
 
