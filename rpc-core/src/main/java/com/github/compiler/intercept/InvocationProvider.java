@@ -7,9 +7,13 @@ import java.lang.reflect.Method;
 
 
 public class InvocationProvider implements Invocation {
+
     private final Method method;
+
     private final Object[] arguments;
+
     private final Object proxy;
+
     private final Object target;
 
     public InvocationProvider(final Object target, final Object proxy, final Method method, final Object[] arguments) {

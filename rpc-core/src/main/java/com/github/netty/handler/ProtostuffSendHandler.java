@@ -1,6 +1,6 @@
 package com.github.netty.handler;
 
-import com.github.netty.MessageSendHandler;
+import com.github.netty.client.MessageSendHandler;
 import com.github.serialize.protostuff.ProtostuffCodecUtil;
 import com.github.serialize.protostuff.ProtostuffDecoder;
 import com.github.serialize.protostuff.ProtostuffEncoder;

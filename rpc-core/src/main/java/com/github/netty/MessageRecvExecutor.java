@@ -10,7 +10,7 @@ import com.github.model.MessageResponse;
 import com.github.netty.resolver.ApiEchoResolver;
 import com.github.parallel.NamedThreadFactory;
 import com.github.parallel.RpcThreadPool;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 import com.google.common.util.concurrent.*;
 import com.sun.istack.internal.NotNull;
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,7 +36,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 
     private int echoApiPort;
 
-    private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
+    private SerializeProtocol serializeProtocol = SerializeProtocol.JDK_NATIVE;
 
     /**
      * 切割ip与port

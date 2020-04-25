@@ -12,6 +12,6 @@ public class CommonConfig {
 
     public static final String echoApiPort = "18888";
 
-    public static final String SERIALIZE = "PROTOSTUFF_SERIALIZE";
+    public static final String SERIALIZE = "PROTOSTUFF";
 
 }

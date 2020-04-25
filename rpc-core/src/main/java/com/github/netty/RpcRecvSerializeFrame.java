@@ -4,7 +4,7 @@ import com.github.netty.handler.NettyRpcRecvHandler;
 import com.github.netty.handler.JdkNativeRecvHandler;
 import com.github.netty.handler.ProtostuffRecvHandler;
 import com.github.serialize.RpcSerializeFrame;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 import io.netty.channel.ChannelPipeline;
 
 import java.util.Map;
@@ -28,13 +28,13 @@ public class RpcRecvSerializeFrame implements RpcSerializeFrame {
     }
 
     @Override
-    public void select(RpcSerializeProtocol protocol, ChannelPipeline pipeline) {
+    public void select(SerializeProtocol protocol, ChannelPipeline pipeline) {
         switch (protocol) {
-            case JDK_SERIALIZE: {
+            case JDK_NATIVE: {
                 handler.getInstance(JdkNativeRecvHandler.class).handle(handlerMap, pipeline);
                 break;
             }
-            case PROTOSTUFF_SERIALIZE: {
+            case PROTOSTUFF: {
                 handler.getInstance(ProtostuffRecvHandler.class).handle(handlerMap, pipeline);
                 break;
             }

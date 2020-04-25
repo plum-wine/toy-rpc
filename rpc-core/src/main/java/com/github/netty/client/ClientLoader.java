@@ -1,8 +1,8 @@
-package com.github.netty;
+package com.github.netty.client;
 
 import com.github.core.RpcSystemConfig;
 import com.github.parallel.RpcThreadPool;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 import com.google.common.util.concurrent.*;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,14 +17,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class RpcServerLoader {
+public class ClientLoader {
 
-    private static volatile RpcServerLoader rpcServerLoader;
+    private static volatile ClientLoader rpcServerLoader;
 
     private static final String DELIMITER = RpcSystemConfig.DELIMITER;
-
-    // 默认序列化方式为native
-    // private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDK_SERIALIZE;
 
     private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 
@@ -46,22 +43,22 @@ public class RpcServerLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private RpcServerLoader() {
+    private ClientLoader() {
     }
 
-    public static RpcServerLoader getInstance() {
+    public static ClientLoader getInstance() {
         if (rpcServerLoader == null) {
-            synchronized (RpcServerLoader.class) {
+            synchronized (ClientLoader.class) {
                 if (rpcServerLoader == null) {
-                    rpcServerLoader = new RpcServerLoader();
+                    rpcServerLoader = new ClientLoader();
                 }
             }
         }
         return rpcServerLoader;
     }
 
-    public void load(String serverAddress, RpcSerializeProtocol serializeProtocol) {
-        String[] ipAddr = serverAddress.split(RpcServerLoader.DELIMITER);
+    public void load(String serverAddress, SerializeProtocol serializeProtocol) {
+        String[] ipAddr = serverAddress.split(ClientLoader.DELIMITER);
         if (ipAddr.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
             String host = ipAddr[0];
             int port = Integer.parseInt(ipAddr[1]);
@@ -92,7 +89,7 @@ public class RpcServerLoader {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    LOGGER.error("send request onFailure", t);
+                    LOGGER.error("load rpc client failure", t);
                 }
             }, threadPoolExecutor);
         } else {

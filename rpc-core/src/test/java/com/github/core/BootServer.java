@@ -7,7 +7,7 @@ import com.github.core.service.IStudentService;
 import com.github.core.service.StudentService;
 import com.github.filter.ServiceFilterBinder;
 import com.github.netty.MessageRecvExecutor;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 
 /**
  * @author hangs.zhang
@@ -21,7 +21,7 @@ public class BootServer {
         MessageRecvExecutor ref = MessageRecvExecutor.getInstance();
         ref.setServerAddress(CommonConfig.ipAddr);
         ref.setEchoApiPort(Integer.parseInt(CommonConfig.echoApiPort));
-        ref.setSerializeProtocol(Enum.valueOf(RpcSerializeProtocol.class, CommonConfig.SERIALIZE));
+        ref.setSerializeProtocol(Enum.valueOf(SerializeProtocol.class, CommonConfig.SERIALIZE));
         ref.start();
 
         SimpleFilter filter = new SimpleFilter();

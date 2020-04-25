@@ -1,7 +1,7 @@
-package com.github.netty;
+package com.github.netty.client;
 
+import com.github.serialize.SerializeProtocol;
 import com.google.common.reflect.Reflection;
-import com.github.serialize.RpcSerializeProtocol;
 
 /**
  * 请求发送执行器
@@ -16,13 +16,12 @@ public class MessageSendExecutor {
         return MessageSendExecutorHolder.INSTANCE;
     }
 
-    private final RpcServerLoader loader = RpcServerLoader.getInstance();
-
     private MessageSendExecutor() {
-
     }
 
-    public void setRpcServerLoader(String serverAddress, RpcSerializeProtocol serializeProtocol) {
+    private final ClientLoader loader = ClientLoader.getInstance();
+
+    public void load(String serverAddress, SerializeProtocol serializeProtocol) {
         loader.load(serverAddress, serializeProtocol);
     }
 

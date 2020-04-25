@@ -3,14 +3,14 @@ package com.github.serialize;
 import lombok.Getter;
 
 @Getter
-public enum RpcSerializeProtocol {
+public enum SerializeProtocol {
 
-    JDK_SERIALIZE("native"),
-    PROTOSTUFF_SERIALIZE("protostuff");
+    JDK_NATIVE("native"),
+    PROTOSTUFF("protostuff");
 
     private final String serializeProtocol;
 
-    RpcSerializeProtocol(String serializeProtocol) {
+    SerializeProtocol(String serializeProtocol) {
         this.serializeProtocol = serializeProtocol;
     }
 

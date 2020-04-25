@@ -3,8 +3,8 @@ package com.github.core;
 import com.github.core.entity.Student;
 import com.github.core.service.HelloService;
 import com.github.core.service.StudentService;
-import com.github.netty.MessageSendExecutor;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.netty.client.MessageSendExecutor;
+import com.github.serialize.SerializeProtocol;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class Client {
         HelloService execute = MessageSendExecutor.getInstance().execute(HelloService.class);
         StudentService studentService = MessageSendExecutor.getInstance().execute(StudentService.class);
 
-        MessageSendExecutor.getInstance().setRpcServerLoader(CommonConfig.ipAddr, RpcSerializeProtocol.valueOf(CommonConfig.SERIALIZE));
+        MessageSendExecutor.getInstance().load(CommonConfig.ipAddr, SerializeProtocol.valueOf(CommonConfig.SERIALIZE));
 
         String result = execute.sayHello();
         LOGGER.info("result:{}", result);

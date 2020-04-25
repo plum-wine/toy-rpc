@@ -3,7 +3,7 @@ package com.github.spring;
 import com.github.core.RpcSystemConfig;
 import com.github.jmx.ModuleMetricsHandler;
 import com.github.netty.MessageRecvExecutor;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 import lombok.Data;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -37,7 +37,7 @@ public class RpcRegistery implements InitializingBean, DisposableBean {
         MessageRecvExecutor ref = MessageRecvExecutor.getInstance();
         ref.setServerAddress(ipAddr);
         ref.setEchoApiPort(Integer.parseInt(echoApiPort));
-        ref.setSerializeProtocol(Enum.valueOf(RpcSerializeProtocol.class, protocol));
+        ref.setSerializeProtocol(Enum.valueOf(SerializeProtocol.class, protocol));
         ref.start();
     }
 

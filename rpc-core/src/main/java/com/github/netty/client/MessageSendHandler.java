@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.client;
 
 import com.github.core.MessageCallBack;
 import com.github.model.MessageRequest;
@@ -8,52 +8,46 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.Getter;
 
 import java.net.SocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+@Getter
 public class MessageSendHandler extends ChannelInboundHandlerAdapter {
 
-    private ConcurrentHashMap<String, MessageCallBack> mapCallBack = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, MessageCallBack> callBackMap = new ConcurrentHashMap<>();
 
     private volatile Channel channel;
 
     private SocketAddress remoteAddr;
 
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public SocketAddress getRemoteAddr() {
-        return remoteAddr;
-    }
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        this.remoteAddr = this.channel.remoteAddress();
+        remoteAddr = channel.remoteAddress();
     }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
         super.channelRegistered(ctx);
-        this.channel = ctx.channel();
+        channel = ctx.channel();
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         MessageResponse response = (MessageResponse) msg;
         String messageId = response.getMessageId();
-        MessageCallBack callBack = mapCallBack.get(messageId);
+        // 根据messageId操作future
+        MessageCallBack callBack = callBackMap.get(messageId);
         if (callBack != null) {
-            mapCallBack.remove(messageId);
+            callBackMap.remove(messageId);
             callBack.over(response);
         }
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
         ctx.close();
     }
@@ -63,8 +57,8 @@ public class MessageSendHandler extends ChannelInboundHandlerAdapter {
     }
 
     public MessageCallBack sendRequest(MessageRequest request) {
-        MessageCallBack callBack = new MessageCallBack(request);
-        mapCallBack.put(request.getMessageId(), callBack);
+        MessageCallBack callBack = new MessageCallBack();
+        callBackMap.put(request.getMessageId(), callBack);
         channel.writeAndFlush(request);
         return callBack;
     }

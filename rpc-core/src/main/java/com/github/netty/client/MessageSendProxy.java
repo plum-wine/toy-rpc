@@ -1,4 +1,4 @@
-package com.github.netty;
+package com.github.netty.client;
 
 import com.github.core.MessageCallBack;
 import com.github.model.MessageRequest;
@@ -20,7 +20,7 @@ public class MessageSendProxy<T> extends AbstractInvocationHandler {
         request.setTypeParameters(method.getParameterTypes());
         request.setParametersVal(args);
 
-        MessageSendHandler handler = RpcServerLoader.getInstance().getMessageSendHandler();
+        MessageSendHandler handler = ClientLoader.getInstance().getMessageSendHandler();
         MessageCallBack callBack = handler.sendRequest(request);
         return callBack.start();
     }

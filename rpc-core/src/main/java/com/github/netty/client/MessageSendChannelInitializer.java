@@ -1,6 +1,7 @@
-package com.github.netty;
+package com.github.netty.client;
 
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.netty.RpcSendSerializeFrame;
+import com.github.serialize.SerializeProtocol;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -8,10 +9,11 @@ import io.netty.channel.socket.SocketChannel;
 
 public class MessageSendChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private RpcSerializeProtocol protocol;
-    private RpcSendSerializeFrame frame = new RpcSendSerializeFrame();
+    private SerializeProtocol protocol;
 
-    MessageSendChannelInitializer buildRpcSerializeProtocol(RpcSerializeProtocol protocol) {
+    private final RpcSendSerializeFrame frame = new RpcSendSerializeFrame();
+
+    MessageSendChannelInitializer buildRpcSerializeProtocol(SerializeProtocol protocol) {
         this.protocol = protocol;
         return this;
     }

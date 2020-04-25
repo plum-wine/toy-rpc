@@ -1,9 +1,9 @@
 package com.github.jmx;
 
 
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.iterators.UniqueFilterIterator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +12,12 @@ import java.util.concurrent.CyclicBarrier;
 
 
 public class MetricsTask implements Runnable {
+
     private final CyclicBarrier barrier;
-    private List<ModuleMetricsVisitor> visitorList;
-    private List<ModuleMetricsVisitor> result = new ArrayList<ModuleMetricsVisitor>();
+
+    private final List<ModuleMetricsVisitor> visitorList;
+
+    private List<ModuleMetricsVisitor> result = Lists.newArrayList();
 
     public MetricsTask(CyclicBarrier barrier, List<ModuleMetricsVisitor> visitorList) {
         this.barrier = barrier;
@@ -27,9 +30,7 @@ public class MetricsTask implements Runnable {
             barrier.await();
             accumulate();
             barrier.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
+        } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
         }
     }

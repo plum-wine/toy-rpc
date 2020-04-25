@@ -6,16 +6,16 @@ import io.netty.channel.socket.SocketChannel;
 
 import java.util.Map;
 
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 
 
 public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private RpcSerializeProtocol protocol;
+    private SerializeProtocol protocol;
 
     private RpcRecvSerializeFrame frame = null;
 
-    MessageRecvChannelInitializer buildRpcSerializeProtocol(RpcSerializeProtocol protocol) {
+    MessageRecvChannelInitializer buildRpcSerializeProtocol(SerializeProtocol protocol) {
         this.protocol = protocol;
         return this;
     }

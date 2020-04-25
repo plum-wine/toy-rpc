@@ -1,7 +1,7 @@
 package com.github.event;
 
 import com.google.common.eventbus.Subscribe;
-import com.github.netty.MessageSendExecutor;
+import com.github.netty.client.MessageSendExecutor;
 
 public class ClientStopEventListener {
     public int lastMessage = 0;

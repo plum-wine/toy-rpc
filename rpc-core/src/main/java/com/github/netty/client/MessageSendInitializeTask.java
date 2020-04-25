@@ -1,7 +1,7 @@
-package com.github.netty;
+package com.github.netty.client;
 
 import com.github.core.RpcSystemConfig;
-import com.github.serialize.RpcSerializeProtocol;
+import com.github.serialize.SerializeProtocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -19,15 +19,15 @@ import java.util.concurrent.TimeUnit;
 
 public class MessageSendInitializeTask implements Callable<Boolean> {
 
-    private EventLoopGroup eventLoopGroup = null;
+    private final EventLoopGroup eventLoopGroup;
 
-    private InetSocketAddress serverAddress = null;
+    private final InetSocketAddress serverAddress;
 
-    private RpcSerializeProtocol protocol;
+    private final SerializeProtocol protocol;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    MessageSendInitializeTask(EventLoopGroup eventLoopGroup, InetSocketAddress serverAddress, RpcSerializeProtocol protocol) {
+    MessageSendInitializeTask(EventLoopGroup eventLoopGroup, InetSocketAddress serverAddress, SerializeProtocol protocol) {
         this.eventLoopGroup = eventLoopGroup;
         this.serverAddress = serverAddress;
         this.protocol = protocol;
@@ -48,7 +48,7 @@ public class MessageSendInitializeTask implements Callable<Boolean> {
             public void operationComplete(final ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()) {
                     MessageSendHandler handler = channelFuture.channel().pipeline().get(MessageSendHandler.class);
-                    RpcServerLoader.getInstance().setMessageSendHandler(handler);
+                    ClientLoader.getInstance().setMessageSendHandler(handler);
                 } else {
                     eventLoopGroup.schedule(new Runnable() {
                         @Override

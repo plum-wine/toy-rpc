@@ -13,24 +13,22 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MessageCallBack {
 
-    private MessageRequest request;
     private MessageResponse response;
-    private Lock lock = new ReentrantLock();
-    private Condition finish = lock.newCondition();
 
-    public MessageCallBack(MessageRequest request) {
-        this.request = request;
-    }
+    private final Lock lock = new ReentrantLock();
+
+    private final Condition finish = lock.newCondition();
 
     public Object start() {
         try {
             lock.lock();
+            // 等待客户端响应
             await();
-            if (this.response != null) {
+            if (response != null) {
                 boolean isInvokeSucc = getInvokeResult();
                 if (isInvokeSucc) {
-                    if (this.response.getError().isEmpty()) {
-                        return this.response.getResult();
+                    if (response.getError().isEmpty()) {
+                        return response.getResult();
                     } else {
                         throw new InvokeModuleException(this.response.getError());
                     }
@@ -48,6 +46,7 @@ public class MessageCallBack {
     public void over(MessageResponse response) {
         try {
             lock.lock();
+            // 唤醒等待的线程
             finish.signal();
             this.response = response;
         } finally {
@@ -58,10 +57,14 @@ public class MessageCallBack {
     private void await() {
         boolean timeout = false;
         try {
+            // 当前线程等待,默认3s
+            // 被唤醒说明有返回结果
             timeout = finish.await(RpcSystemConfig.SYSTEM_PROPERTY_MESSAGE_CALLBACK_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // 超时则抛出异常
         if (!timeout) {
             throw new InvokeTimeoutException(RpcSystemConfig.TIMEOUT_RESPONSE_MSG);
         }
@@ -71,4 +74,5 @@ public class MessageCallBack {
         return (!this.response.getError().equals(RpcSystemConfig.FILTER_RESPONSE_MSG) &&
                 (!this.response.isReturnNotNull() || (this.response.isReturnNotNull() && this.response.getResult() != null)));
     }
+
 }
