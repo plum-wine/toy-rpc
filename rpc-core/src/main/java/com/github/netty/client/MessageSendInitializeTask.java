@@ -1,6 +1,6 @@
 package com.github.netty.client;
 
-import com.github.core.RpcSystemConfig;
+import com.github.core.SystemConfig;
 import com.github.serialize.SerializeProtocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -57,7 +57,7 @@ public class MessageSendInitializeTask implements Callable<Boolean> {
                             // 10s重试一次,不停重试
                             call();
                         }
-                    }, RpcSystemConfig.SYSTEM_PROPERTY_CLIENT_RECONNECT_DELAY, TimeUnit.SECONDS);
+                    }, SystemConfig.SYSTEM_PROPERTY_CLIENT_RECONNECT_DELAY, TimeUnit.SECONDS);
                 }
             }
         });

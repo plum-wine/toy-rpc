@@ -1,6 +1,6 @@
 package com.github.netty.server.proxy;
 
-import com.github.model.MessageRequest;
+import com.github.entity.MessageRequest;
 import lombok.Data;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.lang3.time.StopWatch;

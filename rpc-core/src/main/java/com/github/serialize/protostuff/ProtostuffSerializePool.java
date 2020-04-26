@@ -3,7 +3,7 @@ package com.github.serialize.protostuff;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import static com.github.core.RpcSystemConfig.*;
+import static com.github.core.SystemConfig.*;
 
 
 public class ProtostuffSerializePool {

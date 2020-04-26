@@ -1,7 +1,7 @@
 package com.github.netty.client;
 
 import com.github.core.MessageCallBack;
-import com.github.model.MessageRequest;
+import com.github.entity.MessageRequest;
 import com.google.common.reflect.AbstractInvocationHandler;
 
 import java.lang.reflect.Method;

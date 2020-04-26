@@ -1,8 +1,8 @@
 package com.github.netty.server;
 
-import com.github.core.RpcSystemConfig;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
+import com.github.core.SystemConfig;
+import com.github.entity.MessageRequest;
+import com.github.entity.MessageResponse;
 import com.github.netty.server.proxy.MethodInvoker;
 import com.github.netty.server.proxy.MethodProxyAdvisor;
 import lombok.Data;
@@ -55,9 +55,9 @@ public class MessageRecvInitializeTask implements Callable<Boolean> {
                 response.setError("");
                 response.setReturnNotNull(returnNotNull);
             } else {
-                LOGGER.info(RpcSystemConfig.FILTER_RESPONSE_MSG);
+                LOGGER.info(SystemConfig.FILTER_RESPONSE_MSG);
                 response.setResult(null);
-                response.setError(RpcSystemConfig.FILTER_RESPONSE_MSG);
+                response.setError(SystemConfig.FILTER_RESPONSE_MSG);
             }
             return Boolean.TRUE;
         } catch (Throwable t) {

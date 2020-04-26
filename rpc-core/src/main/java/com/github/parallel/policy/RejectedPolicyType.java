@@ -8,9 +8,9 @@ public enum RejectedPolicyType {
     DISCARDED_POLICY("DiscardedPolicy"),
     REJECTED_POLICY("RejectedPolicy");
 
-    private String value;
+    private final String value;
 
-    private RejectedPolicyType(String value) {
+    RejectedPolicyType(String value) {
         this.value = value;
     }
 
@@ -32,5 +32,6 @@ public enum RejectedPolicyType {
     public String toString() {
         return value;
     }
+
 }
 

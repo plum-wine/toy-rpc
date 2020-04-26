@@ -1,15 +1,17 @@
 package com.github.parallel.policy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 public class RejectedPolicy implements RejectedExecutionHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(RejectedPolicy.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final String threadName;
 
@@ -24,7 +26,7 @@ public class RejectedPolicy implements RejectedExecutionHandler {
     @Override
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            LOG.error("RPC Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
+            LOGGER.error("RPC Thread pool [{}] is exhausted, executor={}", threadName, executor.toString());
         }
 
         if (runnable instanceof RejectedRunnable) {
@@ -36,7 +38,6 @@ public class RejectedPolicy implements RejectedExecutionHandler {
                 for (int i = 0; i < discardSize; i++) {
                     queue.poll();
                 }
-
                 try {
                     queue.put(runnable);
                 } catch (InterruptedException e) {
@@ -44,5 +45,6 @@ public class RejectedPolicy implements RejectedExecutionHandler {
             }
         }
     }
+
 }
 

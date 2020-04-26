@@ -1,7 +1,7 @@
 package com.github.netty.server;
 
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
+import com.github.entity.MessageRequest;
+import com.github.entity.MessageResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;

@@ -2,11 +2,12 @@ package com.github.parallel;
 
 
 public enum BlockingQueueType {
+
     LINKED_BLOCKING_QUEUE("LinkedBlockingQueue"),
     ARRAY_BLOCKING_QUEUE("ArrayBlockingQueue"),
     SYNCHRONOUS_QUEUE("SynchronousQueue");
 
-    private String value;
+    private final String value;
 
     BlockingQueueType(String value) {
         this.value = value;
@@ -22,7 +23,6 @@ public enum BlockingQueueType {
                 return type;
             }
         }
-
         throw new IllegalArgumentException("Mismatched type with value=" + value);
     }
 

@@ -3,8 +3,8 @@ package com.github.serialize.protostuff;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
+import com.github.entity.MessageRequest;
+import com.github.entity.MessageResponse;
 import com.github.serialize.RpcSerialize;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
@@ -48,7 +48,7 @@ public class ProtostuffSerialize implements RpcSerialize {
 
     @Override
     public void serialize(OutputStream output, Object object) {
-        Class cls = (Class) object.getClass();
+        Class cls = object.getClass();
         LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
         try {
             Schema schema = getSchema(cls);

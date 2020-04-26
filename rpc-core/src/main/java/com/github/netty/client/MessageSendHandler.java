@@ -1,8 +1,8 @@
 package com.github.netty.client;
 
 import com.github.core.MessageCallBack;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
+import com.github.entity.MessageRequest;
+import com.github.entity.MessageResponse;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;

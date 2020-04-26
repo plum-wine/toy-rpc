@@ -1,8 +1,8 @@
 package com.github.netty.server;
 
-import com.github.core.RpcSystemConfig;
-import com.github.model.MessageRequest;
-import com.github.model.MessageResponse;
+import com.github.core.SystemConfig;
+import com.github.entity.MessageRequest;
+import com.github.entity.MessageResponse;
 import com.github.parallel.NamedThreadFactory;
 import com.github.parallel.RpcThreadPool;
 import com.github.serialize.SerializeProtocol;
@@ -35,13 +35,13 @@ public class MessageRecvExecutor {
     /**
      * 切割ip与port
      */
-    private static final String DELIMITER = RpcSystemConfig.DELIMITER;
+    private static final String DELIMITER = SystemConfig.DELIMITER;
 
-    private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
+    private static final int PARALLEL = SystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 
-    private static int threadNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
+    private static int threadNums = SystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
 
-    private static int queueNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
+    private static int queueNums = SystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
 
     /**
      * guava的线程池,能够添加监听器
@@ -119,7 +119,7 @@ public class MessageRecvExecutor {
 
             String[] ipAddr = serverAddress.split(MessageRecvExecutor.DELIMITER);
 
-            if (ipAddr.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
+            if (ipAddr.length == SystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
                 final String host = ipAddr[0];
                 final int port = Integer.parseInt(ipAddr[1]);
                 ChannelFuture future = bootstrap.bind(host, port).sync();

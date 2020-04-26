@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum SerializeProtocol {
-
     NATIVE("native"),
     PROTOSTUFF("protostuff");
 

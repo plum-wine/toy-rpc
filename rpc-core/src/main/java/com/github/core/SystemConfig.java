@@ -1,7 +1,7 @@
 package com.github.core;
 
 
-public class RpcSystemConfig {
+public class SystemConfig {
 
     public static final String SYSTEM_PROPERTY_THREADPOOL_REJECTED_POLICY_ATTR = "rpc.parallel.rejected.policy";
 

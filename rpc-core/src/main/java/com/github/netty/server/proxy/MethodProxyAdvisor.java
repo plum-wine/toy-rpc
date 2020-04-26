@@ -2,7 +2,7 @@ package com.github.netty.server.proxy;
 
 import com.github.filter.Filter;
 import com.github.filter.ServiceFilterBinder;
-import com.github.model.MessageRequest;
+import com.github.entity.MessageRequest;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

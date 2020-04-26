@@ -3,7 +3,7 @@ package com.github.core;
 import com.github.exception.InvokeModuleException;
 import com.github.exception.InvokeTimeoutException;
 import com.github.exception.RejectResponeException;
-import com.github.model.MessageResponse;
+import com.github.entity.MessageResponse;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -32,7 +32,7 @@ public class MessageCallBack {
                         throw new InvokeModuleException(this.response.getError());
                     }
                 } else {
-                    throw new RejectResponeException(RpcSystemConfig.FILTER_RESPONSE_MSG);
+                    throw new RejectResponeException(SystemConfig.FILTER_RESPONSE_MSG);
                 }
             } else {
                 return null;
@@ -58,19 +58,19 @@ public class MessageCallBack {
         try {
             // 当前线程等待,默认3s
             // 被唤醒说明有返回结果
-            timeout = finish.await(RpcSystemConfig.SYSTEM_PROPERTY_MESSAGE_CALLBACK_TIMEOUT, TimeUnit.MILLISECONDS);
+            timeout = finish.await(SystemConfig.SYSTEM_PROPERTY_MESSAGE_CALLBACK_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         // 超时则抛出异常
         if (!timeout) {
-            throw new InvokeTimeoutException(RpcSystemConfig.TIMEOUT_RESPONSE_MSG);
+            throw new InvokeTimeoutException(SystemConfig.TIMEOUT_RESPONSE_MSG);
         }
     }
 
     private boolean getInvokeResult() {
-        return (!this.response.getError().equals(RpcSystemConfig.FILTER_RESPONSE_MSG) &&
+        return (!this.response.getError().equals(SystemConfig.FILTER_RESPONSE_MSG) &&
                 (!this.response.isReturnNotNull() || (this.response.isReturnNotNull() && this.response.getResult() != null)));
     }
 

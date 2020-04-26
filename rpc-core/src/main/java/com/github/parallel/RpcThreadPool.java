@@ -1,6 +1,6 @@
 package com.github.parallel;
 
-import com.github.core.RpcSystemConfig;
+import com.github.core.SystemConfig;
 import com.github.parallel.policy.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ public class RpcThreadPool {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static RejectedExecutionHandler createPolicy() {
-        RejectedPolicyType rejectedPolicyType = RejectedPolicyType.fromString(System.getProperty(RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_REJECTED_POLICY_ATTR, "AbortPolicy"));
+        RejectedPolicyType rejectedPolicyType = RejectedPolicyType.fromString(System.getProperty(SystemConfig.SYSTEM_PROPERTY_THREADPOOL_REJECTED_POLICY_ATTR, "AbortPolicy"));
 
         switch (rejectedPolicyType) {
             case BLOCKING_POLICY:
@@ -33,13 +33,13 @@ public class RpcThreadPool {
     }
 
     private static BlockingQueue<Runnable> createBlockingQueue(int queues) {
-        BlockingQueueType queueType = BlockingQueueType.fromString(System.getProperty(RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NAME_ATTR, "LinkedBlockingQueue"));
+        BlockingQueueType queueType = BlockingQueueType.fromString(System.getProperty(SystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NAME_ATTR, "LinkedBlockingQueue"));
 
         switch (queueType) {
             case LINKED_BLOCKING_QUEUE:
                 return new LinkedBlockingQueue<>();
             case ARRAY_BLOCKING_QUEUE:
-                return new ArrayBlockingQueue<>(RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * queues);
+                return new ArrayBlockingQueue<>(SystemConfig.SYSTEM_PROPERTY_PARALLEL * queues);
             case SYNCHRONOUS_QUEUE:
                 return new SynchronousQueue<>();
             default:

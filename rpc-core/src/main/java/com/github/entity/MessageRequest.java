@@ -1,4 +1,4 @@
-package com.github.model;
+package com.github.entity;
 
 import java.io.Serializable;
 

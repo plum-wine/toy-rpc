@@ -1,6 +1,6 @@
 package com.github.netty.client;
 
-import com.github.core.RpcSystemConfig;
+import com.github.core.SystemConfig;
 import com.github.parallel.RpcThreadPool;
 import com.github.serialize.SerializeProtocol;
 import com.google.common.util.concurrent.*;
@@ -21,15 +21,15 @@ public class ClientLoader {
 
     private static volatile ClientLoader rpcServerLoader;
 
-    private static final String DELIMITER = RpcSystemConfig.DELIMITER;
+    private static final String DELIMITER = SystemConfig.DELIMITER;
 
-    private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
+    private static final int PARALLEL = SystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 
     private final EventLoopGroup eventLoopGroup = new NioEventLoopGroup(PARALLEL);
 
-    private static final int threadNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
+    private static final int threadNums = SystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
 
-    private static final int queueNums = RpcSystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
+    private static final int queueNums = SystemConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS;
 
     private static final ListeningExecutorService threadPoolExecutor = MoreExecutors.listeningDecorator((ThreadPoolExecutor) RpcThreadPool.getExecutor(threadNums, queueNums));
 
@@ -59,7 +59,7 @@ public class ClientLoader {
 
     public void load(String serverAddress, SerializeProtocol serializeProtocol) {
         String[] ipAddr = serverAddress.split(ClientLoader.DELIMITER);
-        if (ipAddr.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
+        if (ipAddr.length == SystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
             String host = ipAddr[0];
             int port = Integer.parseInt(ipAddr[1]);
             final InetSocketAddress remoteAddr = new InetSocketAddress(host, port);
