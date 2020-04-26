@@ -3,14 +3,12 @@ package com.github.netty.server;
 import com.github.compiler.AccessAdaptiveProvider;
 import com.github.core.AbilityDetailProvider;
 import com.github.core.RpcSystemConfig;
-import com.github.model.MessageKeyVal;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 import com.github.parallel.NamedThreadFactory;
 import com.github.parallel.RpcThreadPool;
 import com.github.serialize.SerializeProtocol;
 import com.google.common.util.concurrent.*;
-import com.sun.istack.internal.NotNull;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -18,9 +16,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import java.lang.invoke.MethodHandles;
 import java.nio.channels.spi.SelectorProvider;
@@ -31,7 +26,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Data
-public class MessageRecvExecutor implements ApplicationContextAware {
+public class MessageRecvExecutor {
 
     private String serverAddress;
 
@@ -95,6 +90,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
             }
         }
 
+        // 提交任务
         ListenableFuture<Boolean> listenableFuture = threadPoolExecutor.submit(task);
         Futures.addCallback(listenableFuture, new FutureCallback<Boolean>() {
             @Override
@@ -109,23 +105,10 @@ public class MessageRecvExecutor implements ApplicationContextAware {
             }
 
             @Override
-            public void onFailure(@NotNull Throwable throwable) {
+            public void onFailure(Throwable throwable) {
                 LOGGER.error("send response failure", throwable);
             }
         }, threadPoolExecutor);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        try {
-            MessageKeyVal keyVal = (MessageKeyVal) ctx.getBean(Class.forName("com.github.model.MessageKeyVal"));
-            Map<String, Object> rpcServiceObject = keyVal.getMessageKeyVal();
-            for (Map.Entry<String, Object> entry : rpcServiceObject.entrySet()) {
-                handlerMap.put(entry.getKey(), entry.getValue());
-            }
-        } catch (ClassNotFoundException ex) {
-            LOGGER.error("error", ex);
-        }
     }
 
     public void start() {

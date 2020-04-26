@@ -1,6 +1,5 @@
 package com.github.netty.server.initialize;
 
-import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 
@@ -16,10 +15,6 @@ public class RecvInitializeTaskFacade {
 
     private final Map<String, Object> handlerMap;
 
-    private final boolean isMetrics = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_SUPPORT;
-
-    private final boolean jmxMetricsHash = RpcSystemConfig.SYSTEM_PROPERTY_JMX_METRICS_HASH_SUPPORT;
-
     public RecvInitializeTaskFacade(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         this.request = request;
         this.response = response;
@@ -27,11 +22,7 @@ public class RecvInitializeTaskFacade {
     }
 
     public Callable<Boolean> getTask() {
-        return isMetrics ? getMetricsTask() : new MessageRecvInitializeTaskAdapter(request, response, handlerMap);
-    }
-
-    private Callable<Boolean> getMetricsTask() {
-        return jmxMetricsHash ? new HashMessageRecvInitializeTask(request, response, handlerMap) : new MessageRecvInitializeTask(request, response, handlerMap);
+        return new MessageRecvInitializeTaskAdapter(request, response, handlerMap);
     }
 
 }

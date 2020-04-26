@@ -17,6 +17,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+/**
+ * 处理客户端请求的task
+ */
 @Data
 public abstract class AbstractMessageRecvInitializeTask implements Callable<Boolean> {
 

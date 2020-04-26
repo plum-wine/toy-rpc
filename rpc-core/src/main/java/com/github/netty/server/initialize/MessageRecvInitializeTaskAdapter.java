@@ -2,7 +2,6 @@ package com.github.netty.server.initialize;
 
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
-import com.github.netty.server.initialize.AbstractMessageRecvInitializeTask;
 
 import java.util.Map;
 
