@@ -28,7 +28,7 @@ public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChan
      * netty的初始化channel
      */
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
         frame.select(protocol, pipeline);
     }

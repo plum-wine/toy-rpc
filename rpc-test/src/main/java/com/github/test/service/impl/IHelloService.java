@@ -1,4 +1,6 @@
-package com.github.core.service;
+package com.github.test.service.impl;
+
+import com.github.test.service.HelloService;
 
 /**
  * @author hangs.zhang

@@ -28,8 +28,6 @@ public class MessageRecvExecutor {
 
     private String serverAddress;
 
-    private int echoApiPort;
-
     private SerializeProtocol serializeProtocol = SerializeProtocol.NATIVE;
 
     /**
@@ -37,6 +35,7 @@ public class MessageRecvExecutor {
      */
     private static final String DELIMITER = SystemConfig.DELIMITER;
 
+    // 两倍处理器数量
     private static final int PARALLEL = SystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 
     private static int threadNums = SystemConfig.SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS;
@@ -150,8 +149,6 @@ public class MessageRecvExecutor {
     }
 
     private void register() {
-//        handlerMap.put(RpcSystemConfig.RPC_COMPILER_SPI_ATTR, new AccessAdaptiveProvider());
-//        handlerMap.put(RpcSystemConfig.RPC_ABILITY_DETAIL_SPI_ATTR, new AbilityDetailProvider());
     }
 
 }

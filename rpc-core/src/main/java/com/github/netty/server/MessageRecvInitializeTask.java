@@ -48,7 +48,9 @@ public class MessageRecvInitializeTask implements Callable<Boolean> {
         try {
             response.setMessageId(request.getMessageId());
             // 处理请求
+            long start = System.currentTimeMillis();
             Object result = reflect(request);
+            LOGGER.info("reflect cost time:{}", (System.currentTimeMillis() - start));
             boolean isInvokeSucc = (!returnNotNull || result != null);
             if (isInvokeSucc) {
                 response.setResult(result);

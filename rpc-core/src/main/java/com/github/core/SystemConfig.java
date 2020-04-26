@@ -15,6 +15,7 @@ public class SystemConfig {
 
     public static final int SYSTEM_PROPERTY_CLIENT_RECONNECT_DELAY = Integer.parseInt(System.getProperty("rpc.default.client.reconnect.delay", "10"));
 
+    // 处理器数量
     public static final int SYSTEM_PROPERTY_PARALLEL = Math.max(2, Runtime.getRuntime().availableProcessors());
 
     public static final String DELIMITER = ":";

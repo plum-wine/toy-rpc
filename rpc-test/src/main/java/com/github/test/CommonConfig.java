@@ -1,4 +1,4 @@
-package com.github.core;
+package com.github.test;
 
 /**
  * @author hangs.zhang

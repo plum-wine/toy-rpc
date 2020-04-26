@@ -1,6 +1,6 @@
-package com.github.core.service;
+package com.github.test.service;
 
-import com.github.core.entity.Student;
+import com.github.test.entity.Student;
 
 /**
  * @author hangs.zhang

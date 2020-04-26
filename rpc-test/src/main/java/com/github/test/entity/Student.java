@@ -1,4 +1,4 @@
-package com.github.core.entity;
+package com.github.test.entity;
 
 import lombok.Data;
 

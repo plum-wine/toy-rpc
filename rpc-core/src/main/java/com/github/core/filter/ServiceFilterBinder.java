@@ -1,4 +1,4 @@
-package com.github.filter;
+package com.github.core.filter;
 
 
 import lombok.Data;

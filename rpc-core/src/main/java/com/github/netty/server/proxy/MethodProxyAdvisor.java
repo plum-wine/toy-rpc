@@ -1,7 +1,7 @@
 package com.github.netty.server.proxy;
 
-import com.github.filter.Filter;
-import com.github.filter.ServiceFilterBinder;
+import com.github.core.filter.Filter;
+import com.github.core.filter.ServiceFilterBinder;
 import com.github.entity.MessageRequest;
 import lombok.Data;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -32,7 +32,6 @@ public class MethodProxyAdvisor implements MethodInterceptor {
         }
 
         MessageRequest request = (MessageRequest) params[0];
-
         String className = request.getClassName();
         // 在织入过程中设置serviceBean
         Object serviceBean = HANDLERS.get(className);

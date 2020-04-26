@@ -1,13 +1,15 @@
-package com.github.core;
+package com.github.test;
 
-import com.github.core.filter.SimpleFilter;
-import com.github.core.service.HelloService;
-import com.github.core.service.IHelloService;
-import com.github.core.service.IStudentService;
-import com.github.core.service.StudentService;
-import com.github.filter.ServiceFilterBinder;
 import com.github.netty.server.MessageRecvExecutor;
 import com.github.serialize.SerializeProtocol;
+import com.github.core.filter.ServiceFilterBinder;
+import com.github.test.filter.SimpleFilter;
+import com.github.test.service.ExceptionService;
+import com.github.test.service.HelloService;
+import com.github.test.service.StudentService;
+import com.github.test.service.impl.IExceptionService;
+import com.github.test.service.impl.IHelloService;
+import com.github.test.service.impl.IStudentService;
 
 /**
  * @author hangs.zhang
@@ -20,7 +22,6 @@ public class BootServer {
     public static void main(String[] args) {
         MessageRecvExecutor ref = MessageRecvExecutor.getInstance();
         ref.setServerAddress(CommonConfig.ipAddr);
-        ref.setEchoApiPort(Integer.parseInt(CommonConfig.echoApiPort));
         ref.setSerializeProtocol(Enum.valueOf(SerializeProtocol.class, CommonConfig.SERIALIZE));
         ref.start();
 
@@ -37,6 +38,12 @@ public class BootServer {
         binder2.setObject(studentService);
         binder2.setFilter(filter);
         MessageRecvExecutor.getInstance().getHandlerMap().put(StudentService.class.getCanonicalName(), binder2);
+
+        ExceptionService exceptionService = new IExceptionService();
+        ServiceFilterBinder binder3 = new ServiceFilterBinder();
+        binder3.setObject(exceptionService);
+        binder3.setFilter(filter);
+        MessageRecvExecutor.getInstance().getHandlerMap().put(ExceptionService.class.getCanonicalName(), binder3);
     }
 
 }

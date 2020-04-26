@@ -1,6 +1,6 @@
-package com.github.core.filter;
+package com.github.test.filter;
 
-import com.github.filter.Filter;
+import com.github.core.filter.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,5 +23,6 @@ public class SimpleFilter implements Filter {
     public void after(Method method, Object processor, Object[] requestObjects) {
         LOGGER.info(StringUtils.center("[SimpleFilter##after]", 48, "*"));
     }
+
 }
 
