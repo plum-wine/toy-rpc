@@ -9,5 +9,6 @@ public class ProtostuffDecoder extends MessageDecoder {
     public ProtostuffDecoder(MessageCodecUtil util) {
         super(util);
     }
+    
 }
 

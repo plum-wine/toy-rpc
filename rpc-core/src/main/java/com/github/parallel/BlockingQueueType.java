@@ -8,7 +8,7 @@ public enum BlockingQueueType {
 
     private String value;
 
-    private BlockingQueueType(String value) {
+    BlockingQueueType(String value) {
         this.value = value;
     }
 
@@ -30,5 +30,6 @@ public enum BlockingQueueType {
     public String toString() {
         return value;
     }
+
 }
 

@@ -2,33 +2,34 @@ package com.github.serialize.protostuff;
 
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
 public class SchemaCache {
+
     private static class SchemaCacheHolder {
-        private static SchemaCache cache = new SchemaCache();
+        private static final SchemaCache CACHE = new SchemaCache();
     }
 
     public static SchemaCache getInstance() {
-        return SchemaCacheHolder.cache;
+        return SchemaCacheHolder.CACHE;
     }
 
-    private Cache<Class<?>, Schema<?>> cache = CacheBuilder.newBuilder()
-            .maximumSize(1024).expireAfterWrite(1, TimeUnit.HOURS)
+    private final Cache<Class<?>, Schema<?>> CACHE = CacheBuilder.newBuilder()
+            .maximumSize(1024)
+            .expireAfterWrite(1, TimeUnit.HOURS)
             .build();
 
     private Schema<?> get(final Class<?> cls, Cache<Class<?>, Schema<?>> cache) {
         try {
             return cache.get(cls, new Callable<RuntimeSchema<?>>() {
                 @Override
-                public RuntimeSchema<?> call() throws Exception {
+                public RuntimeSchema<?> call() {
                     return RuntimeSchema.createFrom(cls);
                 }
             });
@@ -38,7 +39,8 @@ public class SchemaCache {
     }
 
     public Schema<?> get(final Class<?> cls) {
-        return get(cls, cache);
+        return get(cls, CACHE);
     }
+
 }
 

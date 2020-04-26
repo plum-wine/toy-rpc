@@ -8,8 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class NamedThreadFactory implements ThreadFactory {
 
-    private static final AtomicInteger THREAD_NUMBER = new AtomicInteger(1);
-
     private final AtomicInteger mThreadNum = new AtomicInteger(1);
 
     private final String prefix;
@@ -17,10 +15,6 @@ public class NamedThreadFactory implements ThreadFactory {
     private final boolean daemoThread;
 
     private final ThreadGroup threadGroup;
-
-    public NamedThreadFactory() {
-        this("rpcserver-threadpool-" + THREAD_NUMBER.getAndIncrement(), false);
-    }
 
     public NamedThreadFactory(String prefix) {
         this(prefix, false);
@@ -41,8 +35,5 @@ public class NamedThreadFactory implements ThreadFactory {
         return ret;
     }
 
-    public ThreadGroup getThreadGroup() {
-        return threadGroup;
-    }
 }
 

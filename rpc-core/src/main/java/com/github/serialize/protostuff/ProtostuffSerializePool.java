@@ -3,19 +3,14 @@ package com.github.serialize.protostuff;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import static com.github.core.RpcSystemConfig.SERIALIZE_POOL_MAX_TOTAL;
-import static com.github.core.RpcSystemConfig.SERIALIZE_POOL_MIN_IDLE;
-import static com.github.core.RpcSystemConfig.SERIALIZE_POOL_MAX_WAIT_MILLIS;
-import static com.github.core.RpcSystemConfig.SERIALIZE_POOL_MIN_EVICTABLE_IDLE_TIME_MILLIS;
+import static com.github.core.RpcSystemConfig.*;
 
 
 public class ProtostuffSerializePool {
-    private GenericObjectPool<ProtostuffSerialize> protostuffPool;
-    private static volatile ProtostuffSerializePool poolFactory = null;
 
-    private ProtostuffSerializePool() {
-        protostuffPool = new GenericObjectPool<ProtostuffSerialize>(new ProtostuffSerializeFactory());
-    }
+    private final GenericObjectPool<ProtostuffSerialize> protostuffPool;
+
+    private static volatile ProtostuffSerializePool poolFactory = null;
 
     public static ProtostuffSerializePool getProtostuffPoolInstance() {
         if (poolFactory == null) {
@@ -29,7 +24,7 @@ public class ProtostuffSerializePool {
     }
 
     public ProtostuffSerializePool(final int maxTotal, final int minIdle, final long maxWaitMillis, final long minEvictableIdleTimeMillis) {
-        protostuffPool = new GenericObjectPool<ProtostuffSerialize>(new ProtostuffSerializeFactory());
+        protostuffPool = new GenericObjectPool<>(new ProtostuffSerializeFactory());
 
         GenericObjectPoolConfig config = new GenericObjectPoolConfig();
 
@@ -57,5 +52,6 @@ public class ProtostuffSerializePool {
     public GenericObjectPool<ProtostuffSerialize> getProtostuffPool() {
         return protostuffPool;
     }
+
 }
 

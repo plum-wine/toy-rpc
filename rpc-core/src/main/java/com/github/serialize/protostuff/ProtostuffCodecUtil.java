@@ -1,7 +1,7 @@
 package com.github.serialize.protostuff;
 
-import com.google.common.io.Closer;
 import com.github.serialize.MessageCodecUtil;
+import com.google.common.io.Closer;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayInputStream;
@@ -10,13 +10,12 @@ import java.io.IOException;
 
 
 public class ProtostuffCodecUtil implements MessageCodecUtil {
-    private static Closer closer = Closer.create();
-    private ProtostuffSerializePool pool = ProtostuffSerializePool.getProtostuffPoolInstance();
-    private boolean rpcDirect = false;
 
-    public boolean isRpcDirect() {
-        return rpcDirect;
-    }
+    private static final Closer CLOSER = Closer.create();
+
+    private ProtostuffSerializePool pool = ProtostuffSerializePool.getProtostuffPoolInstance();
+
+    private boolean rpcDirect = false;
 
     public void setRpcDirect(boolean rpcDirect) {
         this.rpcDirect = rpcDirect;
@@ -26,7 +25,7 @@ public class ProtostuffCodecUtil implements MessageCodecUtil {
     public void encode(final ByteBuf out, final Object message) throws IOException {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            closer.register(byteArrayOutputStream);
+            CLOSER.register(byteArrayOutputStream);
             ProtostuffSerialize protostuffSerialization = pool.borrow();
             protostuffSerialization.serialize(byteArrayOutputStream, message);
             byte[] body = byteArrayOutputStream.toByteArray();
@@ -35,7 +34,7 @@ public class ProtostuffCodecUtil implements MessageCodecUtil {
             out.writeBytes(body);
             pool.restore(protostuffSerialization);
         } finally {
-            closer.close();
+            CLOSER.close();
         }
     }
 
@@ -43,14 +42,14 @@ public class ProtostuffCodecUtil implements MessageCodecUtil {
     public Object decode(byte[] body) throws IOException {
         try {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body);
-            closer.register(byteArrayInputStream);
+            CLOSER.register(byteArrayInputStream);
             ProtostuffSerialize protostuffSerialization = pool.borrow();
             protostuffSerialization.setRpcDirect(rpcDirect);
             Object obj = protostuffSerialization.deserialize(byteArrayInputStream);
             pool.restore(protostuffSerialization);
             return obj;
         } finally {
-            closer.close();
+            CLOSER.close();
         }
     }
 }

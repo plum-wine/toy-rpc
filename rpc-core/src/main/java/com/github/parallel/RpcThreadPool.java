@@ -48,8 +48,8 @@ public class RpcThreadPool {
     }
 
     public static Executor getExecutor(int threads, int queues) {
-        LOGGER.info("ThreadPool Core [threads:{},queues:{}]", threads, queues);
-        String name = "RpcThreadPool";
+        LOGGER.info("Toy-ThreadPool Core [threads:{},queues:{}]", threads, queues);
+        String name = "Toy-ThreadPool";
         return new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
                 createBlockingQueue(queues),
                 new NamedThreadFactory(name, true), createPolicy());
