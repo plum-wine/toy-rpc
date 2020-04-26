@@ -3,7 +3,6 @@ package com.github.core;
 import com.github.exception.InvokeModuleException;
 import com.github.exception.InvokeTimeoutException;
 import com.github.exception.RejectResponeException;
-import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
 
 import java.util.concurrent.TimeUnit;

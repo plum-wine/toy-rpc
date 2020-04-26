@@ -1,6 +1,6 @@
 package com.github.netty.serialize;
 
-import com.github.netty.handler.impl.JdkNativeSendHandler;
+import com.github.netty.handler.impl.NativeSendHandler;
 import com.github.netty.handler.NettyRpcSendHandler;
 import com.github.netty.handler.impl.ProtostuffSendHandler;
 import com.github.serialize.RpcSerializeFrame;
@@ -15,15 +15,15 @@ public class RpcSendSerializeFrame implements RpcSerializeFrame {
     private static final ClassToInstanceMap<NettyRpcSendHandler> HANDLER = MutableClassToInstanceMap.create();
 
     static {
-        HANDLER.putInstance(JdkNativeSendHandler.class, new JdkNativeSendHandler());
+        HANDLER.putInstance(NativeSendHandler.class, new NativeSendHandler());
         HANDLER.putInstance(ProtostuffSendHandler.class, new ProtostuffSendHandler());
     }
 
     @Override
     public void select(SerializeProtocol protocol, ChannelPipeline pipeline) {
         switch (protocol) {
-            case JDK_NATIVE: {
-                HANDLER.getInstance(JdkNativeSendHandler.class).handle(pipeline);
+            case NATIVE: {
+                HANDLER.getInstance(NativeSendHandler.class).handle(pipeline);
                 break;
             }
             case PROTOSTUFF: {

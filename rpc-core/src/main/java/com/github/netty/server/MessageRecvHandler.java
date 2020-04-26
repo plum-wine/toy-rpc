@@ -2,7 +2,6 @@ package com.github.netty.server;
 
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
-import com.github.netty.server.initialize.RecvInitializeTaskFacade;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
@@ -32,8 +31,7 @@ public class MessageRecvHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         MessageRequest request = (MessageRequest) msg;
         MessageResponse response = new MessageResponse();
-        RecvInitializeTaskFacade facade = new RecvInitializeTaskFacade(request, response, handlerMap);
-        Callable<Boolean> recvTask = facade.getTask();
+        Callable<Boolean> recvTask = new MessageRecvInitializeTask(request, response, handlerMap);
         // 请求处理
         MessageRecvExecutor.submit(recvTask, ctx, request, response);
     }

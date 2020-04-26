@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SerializeProtocol {
 
-    JDK_NATIVE("native"),
+    NATIVE("native"),
     PROTOSTUFF("protostuff");
 
     private final String serializeProtocol;

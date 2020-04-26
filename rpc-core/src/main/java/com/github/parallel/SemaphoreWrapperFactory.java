@@ -2,6 +2,7 @@ package com.github.parallel;
 
 
 public class SemaphoreWrapperFactory extends SemaphoreWrapper {
+
     private static final SemaphoreWrapperFactory INSTANCE = new SemaphoreWrapperFactory();
 
     public static SemaphoreWrapperFactory getInstance() {

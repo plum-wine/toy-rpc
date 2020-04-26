@@ -1,7 +1,5 @@
 package com.github.netty.server;
 
-import com.github.compiler.AccessAdaptiveProvider;
-import com.github.core.AbilityDetailProvider;
 import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
 import com.github.model.MessageResponse;
@@ -32,7 +30,7 @@ public class MessageRecvExecutor {
 
     private int echoApiPort;
 
-    private SerializeProtocol serializeProtocol = SerializeProtocol.JDK_NATIVE;
+    private SerializeProtocol serializeProtocol = SerializeProtocol.NATIVE;
 
     /**
      * 切割ip与port
@@ -130,9 +128,6 @@ public class MessageRecvExecutor {
                     @Override
                     public void operationComplete(final ChannelFuture channelFuture) throws Exception {
                         if (channelFuture.isSuccess()) {
-                            // final ExecutorService executor = Executors.newFixedThreadPool(numberOfEchoThreadsPool);
-                            // ExecutorCompletionService<Boolean> completionService = new ExecutorCompletionService<>(executor);
-                            // completionService.submit(new ApiEchoResolver(host, echoApiPort));
                             LOGGER.info("RPC Server start success!");
                             LOGGER.info("ip:{} port:{} protocol:{}", host, port, serializeProtocol);
                         }
@@ -155,8 +150,8 @@ public class MessageRecvExecutor {
     }
 
     private void register() {
-        handlerMap.put(RpcSystemConfig.RPC_COMPILER_SPI_ATTR, new AccessAdaptiveProvider());
-        handlerMap.put(RpcSystemConfig.RPC_ABILITY_DETAIL_SPI_ATTR, new AbilityDetailProvider());
+//        handlerMap.put(RpcSystemConfig.RPC_COMPILER_SPI_ATTR, new AccessAdaptiveProvider());
+//        handlerMap.put(RpcSystemConfig.RPC_ABILITY_DETAIL_SPI_ATTR, new AbilityDetailProvider());
     }
 
 }

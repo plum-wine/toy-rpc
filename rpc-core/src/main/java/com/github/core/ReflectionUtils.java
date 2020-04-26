@@ -1,19 +1,10 @@
-
 package com.github.core;
 
-import com.google.common.collect.ImmutableMap;
 import com.github.exception.CreateProxyException;
+import com.google.common.collect.ImmutableMap;
 
 import java.io.Serializable;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Array;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,38 +12,32 @@ import java.util.Set;
 
 
 public class ReflectionUtils {
-    private static ImmutableMap.Builder<Class, Object> builder = ImmutableMap.builder();
-    private StringBuilder provider = new StringBuilder();
 
-    public StringBuilder getProvider() {
-        return provider;
-    }
+    private static final ImmutableMap.Builder<Class<?>, Object> builder = ImmutableMap.builder();
 
-    public void clearProvider() {
-        provider.delete(0, provider.length());
-    }
+    private final StringBuilder provider = new StringBuilder();
 
     static {
         builder.put(Boolean.class, Boolean.FALSE);
-        builder.put(Byte.class, Byte.valueOf((byte) 0));
-        builder.put(Character.class, Character.valueOf((char) 0));
-        builder.put(Short.class, Short.valueOf((short) 0));
-        builder.put(Double.class, Double.valueOf(0));
-        builder.put(Float.class, Float.valueOf(0));
-        builder.put(Integer.class, Integer.valueOf(0));
-        builder.put(Long.class, Long.valueOf(0));
+        builder.put(Byte.class, (byte) 0);
+        builder.put(Character.class, (char) 0);
+        builder.put(Short.class, (short) 0);
+        builder.put(Double.class, (double) 0);
+        builder.put(Float.class, (float) 0);
+        builder.put(Integer.class, 0);
+        builder.put(Long.class, 0L);
         builder.put(boolean.class, Boolean.FALSE);
-        builder.put(byte.class, Byte.valueOf((byte) 0));
-        builder.put(char.class, Character.valueOf((char) 0));
-        builder.put(short.class, Short.valueOf((short) 0));
-        builder.put(double.class, Double.valueOf(0));
-        builder.put(float.class, Float.valueOf(0));
-        builder.put(int.class, Integer.valueOf(0));
-        builder.put(long.class, Long.valueOf(0));
+        builder.put(byte.class, (byte) 0);
+        builder.put(char.class, (char) 0);
+        builder.put(short.class, (short) 0);
+        builder.put(double.class, (double) 0);
+        builder.put(float.class, (float) 0);
+        builder.put(int.class, 0);
+        builder.put(long.class, 0L);
     }
 
     public static Class<?>[] filterInterfaces(Class<?>[] proxyClasses) {
-        Set<Class<?>> interfaces = new HashSet<Class<?>>();
+        Set<Class<?>> interfaces = new HashSet<>();
         for (Class<?> proxyClass : proxyClasses) {
             if (proxyClass.isInterface()) {
                 interfaces.add(proxyClass);
@@ -64,7 +49,7 @@ public class ReflectionUtils {
     }
 
     public static Class<?>[] filterNonInterfaces(Class<?>[] proxyClasses) {
-        Set<Class<?>> superclasses = new HashSet<Class<?>>();
+        Set<Class<?>> superclasses = new HashSet<>();
         for (Class<?> proxyClass : proxyClasses) {
             if (!proxyClass.isInterface()) {
                 superclasses.add(proxyClass);
@@ -153,11 +138,7 @@ public class ReflectionUtils {
 
         try {
             return constructor.newInstance(args);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;

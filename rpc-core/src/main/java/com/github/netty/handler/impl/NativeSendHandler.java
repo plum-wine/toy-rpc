@@ -11,7 +11,7 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
 
-public class JdkNativeSendHandler implements NettyRpcSendHandler {
+public class NativeSendHandler implements NettyRpcSendHandler {
     @Override
     public void handle(ChannelPipeline pipeline) {
         pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, MessageCodecUtil.MESSAGE_LENGTH, 0, MessageCodecUtil.MESSAGE_LENGTH));

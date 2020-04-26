@@ -1,4 +1,4 @@
-package com.github.netty.server.initialize;
+package com.github.netty.server;
 
 import com.github.core.RpcSystemConfig;
 import com.github.model.MessageRequest;
@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
  * 处理客户端请求的task
  */
 @Data
-public abstract class AbstractMessageRecvInitializeTask implements Callable<Boolean> {
+public class MessageRecvInitializeTask implements Callable<Boolean> {
 
     protected MessageRequest request = null;
 
@@ -37,7 +37,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public AbstractMessageRecvInitializeTask(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
+    public MessageRecvInitializeTask(MessageRequest request, MessageResponse response, Map<String, Object> handlerMap) {
         this.request = request;
         this.response = response;
         this.handlerMap = handlerMap;
@@ -46,9 +46,7 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
     @Override
     public Boolean call() {
         try {
-            acquire();
             response.setMessageId(request.getMessageId());
-            injectInvoke();
             // 处理请求
             Object result = reflect(request);
             boolean isInvokeSucc = (!returnNotNull || result != null);
@@ -56,21 +54,16 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
                 response.setResult(result);
                 response.setError("");
                 response.setReturnNotNull(returnNotNull);
-                injectSuccInvoke(invokeTimespan);
             } else {
                 LOGGER.info(RpcSystemConfig.FILTER_RESPONSE_MSG);
                 response.setResult(null);
                 response.setError(RpcSystemConfig.FILTER_RESPONSE_MSG);
-                injectFilterInvoke();
             }
             return Boolean.TRUE;
         } catch (Throwable t) {
             response.setError(getStackTrace(t));
             LOGGER.error("RPC Server invoke error!", t);
-            injectFailInvoke(t);
             return Boolean.FALSE;
-        } finally {
-            release();
         }
     }
 
@@ -97,18 +90,6 @@ public abstract class AbstractMessageRecvInitializeTask implements Callable<Bool
         ex.printStackTrace(new PrintWriter(buf));
         return buf.toString();
     }
-
-    protected abstract void injectInvoke();
-
-    protected abstract void injectSuccInvoke(long invokeTimespan);
-
-    protected abstract void injectFailInvoke(Throwable error);
-
-    protected abstract void injectFilterInvoke();
-
-    protected abstract void acquire();
-
-    protected abstract void release();
 
 }
 

@@ -13,7 +13,7 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import java.util.Map;
 
 
-public class JdkNativeRecvHandler implements NettyRpcRecvHandler {
+public class NativeRecvHandler implements NettyRpcRecvHandler {
     @Override
     public void handle(Map<String, Object> handlerMap, ChannelPipeline pipeline) {
         pipeline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, MessageCodecUtil.MESSAGE_LENGTH, 0, MessageCodecUtil.MESSAGE_LENGTH));
