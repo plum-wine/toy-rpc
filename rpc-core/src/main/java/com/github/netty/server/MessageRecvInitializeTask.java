@@ -76,15 +76,15 @@ public class MessageRecvInitializeTask implements Callable<Boolean> {
         advisor.setAdvice(new MethodProxyAdvisor(handlerMap));
         weaver.addAdvisor(advisor);
         // 完成织入
-        MethodInvoker mi = (MethodInvoker) weaver.getProxy();
-        Object obj = invoke(mi, request);
-        invokeTimespan = mi.getInvokeTimespan();
+        MethodInvoker methodInvoker = (MethodInvoker) weaver.getProxy();
+        Object obj = invoke(methodInvoker, request);
+        invokeTimespan = methodInvoker.getInvokeTimespan();
         setReturnNotNull(((MethodProxyAdvisor) advisor.getAdvice()).isReturnNotNull());
         return obj;
     }
 
-    private Object invoke(MethodInvoker mi, MessageRequest request) throws Throwable {
-        return mi.invoke(request);
+    private Object invoke(MethodInvoker methodInvoker, MessageRequest request) throws Throwable {
+        return methodInvoker.invoke(request);
     }
 
     public String getStackTrace(Throwable ex) {
