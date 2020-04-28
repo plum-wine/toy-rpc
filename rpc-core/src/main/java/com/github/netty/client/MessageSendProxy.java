@@ -21,7 +21,9 @@ public class MessageSendProxy<T> extends AbstractInvocationHandler {
         request.setParametersVal(args);
 
         MessageSendHandler handler = ClientLoader.getInstance().getMessageSendHandler();
+        // 发送请求
         MessageCallBack callBack = handler.sendRequest(request);
+        // 获取返回值
         return callBack.start();
     }
 
