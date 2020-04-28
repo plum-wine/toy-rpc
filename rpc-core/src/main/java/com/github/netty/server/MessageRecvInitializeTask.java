@@ -47,10 +47,8 @@ public class MessageRecvInitializeTask implements Callable<Boolean> {
     public Boolean call() {
         try {
             response.setMessageId(request.getMessageId());
-            // 处理请求
-            long start = System.currentTimeMillis();
+            // 执行客户端传来的请求
             Object result = reflect(request);
-            LOGGER.info("reflect cost time:{}", (System.currentTimeMillis() - start));
             boolean isInvokeSucc = (!returnNotNull || result != null);
             if (isInvokeSucc) {
                 response.setResult(result);
@@ -72,6 +70,7 @@ public class MessageRecvInitializeTask implements Callable<Boolean> {
     private Object reflect(MessageRequest request) throws Throwable {
         ProxyFactory weaver = new ProxyFactory(new MethodInvoker());
         NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor();
+        // 代理MethodInvoker的invoke方法
         advisor.setMappedName(METHOD_MAPPED_NAME);
         advisor.setAdvice(new MethodProxyAdvisor(handlerMap));
         weaver.addAdvisor(advisor);
